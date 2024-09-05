@@ -7,7 +7,9 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-type listRequest struct{}
+type listRequest struct {
+	Locale string
+}
 
 type listResponse struct{}
 
@@ -22,9 +24,10 @@ type listResponse struct{}
 // @Failure 400 {object} code.Failure
 // @Router /cart/list [get]
 func (h *handler) List(ctx *gin.Context) {
-	_ = new(listRequest)
+	req := new(listRequest)
 	_ = new(listResponse)
-	list, err := h.service.List(ctx)
+	// jacky.xie @2024.09.01 未测试
+	list, err := h.service.List(ctx, req.Locale)
 	if err != nil {
 		log.WithTrace(ctx).Error(err)
 		api.Failed(ctx, err.Error())

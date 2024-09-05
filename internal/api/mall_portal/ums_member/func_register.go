@@ -12,7 +12,8 @@ type registerRequest struct {
 	Username  string `form:"username" binding:"required"`
 	Password  string `form:"password" binding:"required"`
 	Telephone string `form:"telephone" binding:"required"`
-	AuthCode  string `form:"authCode" binding:"required"`
+	//AuthCode  string `form:"authCode" binding:"required"`
+	AuthCode string `form:"authCode"`
 }
 
 type registerResponse struct{}

@@ -10,8 +10,9 @@ import (
 )
 
 type recommendProductListRequest struct {
-	PageNum  int `form:"pageNum,default=1" binding:"omitempty"`
-	PageSize int `form:"pageSize,default=4" binding:"omitempty"`
+	Locale   string `form:"locale,default=zh" binding:"omitempty"` //jacky.xie@2024-08-31
+	PageNum  int    `form:"pageNum,default=1" binding:"omitempty"`
+	PageSize int    `form:"pageSize,default=4" binding:"omitempty"`
 }
 
 type recommendProductListResponse struct {
@@ -37,7 +38,7 @@ func (h *handler) RecommendProductList(ctx *gin.Context) {
 		return
 	}
 
-	list, err := h.service.RecommendProductList(ctx, req.PageNum, req.PageSize)
+	list, err := h.service.RecommendProductList(ctx, req.PageNum, req.PageSize, req.Locale) //jacky.xie@2024-08-31
 	if err != nil {
 		log.WithTrace(ctx).Error(err)
 		api.Failed(ctx, err.Error())

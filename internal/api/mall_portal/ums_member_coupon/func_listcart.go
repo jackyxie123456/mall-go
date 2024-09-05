@@ -11,7 +11,8 @@ import (
 )
 
 type listCartRequest struct {
-	Type int32 `uri:"type" binding:"required"` // 类型
+	Type   int32 `uri:"type" binding:"required"` // 类型
+	Locale string
 }
 
 type listCartResponse struct {
@@ -37,7 +38,7 @@ func (h *handler) ListCart(ctx *gin.Context) {
 		return
 	}
 
-	cartItemList, err := oms_cart_item.New().ListPromotion(ctx, nil)
+	cartItemList, err := oms_cart_item.New().ListPromotion(ctx, nil, req.Locale) // Jacky.xie @2024.09.01 未测试
 	if err != nil {
 		log.WithTrace(ctx).Error(err)
 		api.Failed(ctx, err.Error())

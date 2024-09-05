@@ -165,6 +165,47 @@ definitions:
         description: 主键ID
         type: integer
     type: object
+  alipay.notifyRequest:
+    type: object
+  alipay.notifyResponse:
+    type: object
+  alipay.payRequest:
+    properties:
+      outTradeNo:
+        description: 商户订单号，商家自定义，保持唯一性
+        type: string
+      subject:
+        description: 商品的标题/交易标题/订单标题/订单关键字等
+        type: string
+      totalAmount:
+        description: 订单总金额，单位为元，精确到小数点后两位
+        type: number
+    type: object
+  alipay.payResponse:
+    type: object
+  alipay.queryRequest:
+    properties:
+      outTradeNo:
+        type: string
+      tradeNo:
+        type: string
+    type: object
+  alipay.queryResponse:
+    type: object
+  alipay.webPayRequest:
+    properties:
+      outTradeNo:
+        description: 商户订单号，商家自定义，保持唯一性
+        type: string
+      subject:
+        description: 商品的标题/交易标题/订单标题/订单关键字等
+        type: string
+      totalAmount:
+        description: 订单总金额，单位为元，精确到小数点后两位
+        type: number
+    type: object
+  alipay.webPayResponse:
+    type: object
   authorized.createAPIResponse:
     properties:
       id:
@@ -3184,6 +3225,8 @@ definitions:
     properties:
       orderId:
         type: integer
+    required:
+    - orderId
     type: object
   oms_portal_order.cancelOrderResponse:
     type: object
@@ -3195,6 +3238,8 @@ definitions:
     properties:
       orderId:
         type: integer
+    required:
+    - orderId
     type: object
   oms_portal_order.cancelUserOrderResponse:
     type: object
@@ -3202,6 +3247,8 @@ definitions:
     properties:
       orderId:
         type: integer
+    required:
+    - orderId
     type: object
   oms_portal_order.confirmReceiveOrderResponse:
     type: object
@@ -3209,6 +3256,8 @@ definitions:
     properties:
       orderId:
         type: integer
+    required:
+    - orderId
     type: object
   oms_portal_order.deleteOrderResponse:
     type: object
@@ -6681,6 +6730,130 @@ paths:
       summary: 修改帐号状态
       tags:
       - UmsAdminController
+  /alipay/notify:
+    post:
+      consumes:
+      - application/x-www-form-urlencoded
+      description: 支付宝异步回调
+      parameters:
+      - description: 请求信息
+        in: body
+        name: Request
+        required: true
+        schema:
+          $ref: '#/definitions/alipay.notifyRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/code.Success'
+            - properties:
+                data:
+                  $ref: '#/definitions/alipay.notifyResponse'
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/code.Failure'
+      summary: 支付宝异步回调
+      tags:
+      - AlipayController
+  /alipay/pay:
+    get:
+      consumes:
+      - application/x-www-form-urlencoded
+      description: 支付宝电脑网站支付
+      parameters:
+      - description: 请求信息
+        in: body
+        name: Request
+        required: true
+        schema:
+          $ref: '#/definitions/alipay.payRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/code.Success'
+            - properties:
+                data:
+                  $ref: '#/definitions/alipay.payResponse'
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/code.Failure'
+      summary: 支付宝电脑网站支付
+      tags:
+      - AlipayController
+  /alipay/query:
+    get:
+      consumes:
+      - application/x-www-form-urlencoded
+      description: 支付宝统一收单线下交易查询
+      parameters:
+      - description: 请求信息
+        in: body
+        name: Request
+        required: true
+        schema:
+          $ref: '#/definitions/alipay.queryRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/code.Success'
+            - properties:
+                data:
+                  $ref: '#/definitions/alipay.queryResponse'
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/code.Failure'
+      summary: 支付宝统一收单线下交易查询
+      tags:
+      - AlipayController
+  /alipay/webPay:
+    get:
+      consumes:
+      - application/x-www-form-urlencoded
+      description: 支付宝手机网站支付
+      parameters:
+      - description: 请求信息
+        in: body
+        name: Request
+        required: true
+        schema:
+          $ref: '#/definitions/alipay.webPayRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/code.Success'
+            - properties:
+                data:
+                  $ref: '#/definitions/alipay.webPayResponse'
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/code.Failure'
+      summary: 支付宝手机网站支付
+      tags:
+      - AlipayController
   /api/admin:
     get:
       consumes:

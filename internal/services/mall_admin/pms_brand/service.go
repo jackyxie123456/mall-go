@@ -21,6 +21,7 @@ func (s *service) i() {}
 func (s *service) Create(ctx context.Context, param dto.PmsBrandParam) (int64, error) {
 	data := &pms_brand.PmsBrand{
 		Name:                param.Name,
+		NameEn:              param.NameEn,
 		FirstLetter:         param.FirstLetter,
 		Sort:                param.Sort,
 		FactoryStatus:       param.FactoryStatus,
@@ -30,6 +31,7 @@ func (s *service) Create(ctx context.Context, param dto.PmsBrandParam) (int64, e
 		Logo:                param.Logo,
 		BigPic:              param.BigPic,
 		BrandStory:          param.BrandStory,
+		BrandStoryEn:        param.BrandStoryEn,
 	}
 	// 如果创建时首字母为空，取名称的第一个为首字母
 	if data.FirstLetter == "" && len(data.Name) > 0 {
@@ -45,7 +47,7 @@ func (s *service) Update(ctx context.Context, id int64, param dto.PmsBrandParam)
 	}
 
 	// 更新品牌时要更新商品中的品牌名称
-	pmsProduct := map[string]interface{}{"brand_name": param.Name}
+	pmsProduct := map[string]interface{}{"brand_name": param.Name, "brand_name_en": param.NameEn}
 	pmsProductQb := pms_product.NewQueryBuilder()
 	pmsProductQb = pmsProductQb.WhereBrandId(mysql.EqualPredicate, id)
 	if _, err := pmsProductQb.Updates(mysql.DB().GetDbW().WithContext(ctx), pmsProduct); err != nil {
@@ -55,6 +57,7 @@ func (s *service) Update(ctx context.Context, id int64, param dto.PmsBrandParam)
 	data := map[string]interface{}{
 		"id":                    id,
 		"name":                  param.Name,
+		"name_en":               param.NameEn,
 		"first_letter":          param.FirstLetter,
 		"sort":                  param.Sort,
 		"factory_status":        param.FactoryStatus,
@@ -64,7 +67,8 @@ func (s *service) Update(ctx context.Context, id int64, param dto.PmsBrandParam)
 		"logo":                  param.Logo,
 		"big_pic":               param.BigPic,
 		"brand_story":           param.BrandStory,
-	}
+		"brand_story_en":        param.BrandStory,
+	} // jacky.xie modify @20240904
 	qb := pms_brand.NewQueryBuilder()
 	qb = qb.WhereId(mysql.EqualPredicate, id)
 	return qb.Updates(mysql.DB().GetDbW().WithContext(ctx), data)
@@ -91,6 +95,7 @@ func (s *service) ListAll(ctx context.Context) ([]dto.PmsBrand, error) {
 		listData = append(listData, dto.PmsBrand{
 			Id:                  v.Id,
 			Name:                v.Name,
+			NameEn:              v.NameEn,
 			FirstLetter:         v.FirstLetter,
 			Sort:                v.Sort,
 			FactoryStatus:       v.FactoryStatus,
@@ -100,6 +105,7 @@ func (s *service) ListAll(ctx context.Context) ([]dto.PmsBrand, error) {
 			Logo:                v.Logo,
 			BigPic:              v.BigPic,
 			BrandStory:          v.BrandStory,
+			BrandStoryEn:        v.BrandStoryEn,
 		})
 	}
 	return listData, nil
@@ -133,6 +139,7 @@ func (s *service) List(ctx context.Context, keyword string, showStatus int32, pa
 		listData = append(listData, dto.PmsBrand{
 			Id:                  v.Id,
 			Name:                v.Name,
+			NameEn:              v.NameEn,
 			FirstLetter:         v.FirstLetter,
 			Sort:                v.Sort,
 			FactoryStatus:       v.FactoryStatus,
@@ -142,7 +149,8 @@ func (s *service) List(ctx context.Context, keyword string, showStatus int32, pa
 			Logo:                v.Logo,
 			BigPic:              v.BigPic,
 			BrandStory:          v.BrandStory,
-		})
+			BrandStoryEn:        v.BrandStoryEn,
+		}) // jacky.xie@2024.09.04 for en locale
 	}
 	return listData, count, err
 }
@@ -157,6 +165,7 @@ func (s *service) GetItem(ctx context.Context, id int64) (*dto.PmsBrand, error) 
 	return &dto.PmsBrand{
 		Id:                  item.Id,
 		Name:                item.Name,
+		NameEn:              item.NameEn,
 		FirstLetter:         item.FirstLetter,
 		Sort:                item.Sort,
 		FactoryStatus:       item.FactoryStatus,
@@ -166,6 +175,7 @@ func (s *service) GetItem(ctx context.Context, id int64) (*dto.PmsBrand, error) 
 		Logo:                item.Logo,
 		BigPic:              item.BigPic,
 		BrandStory:          item.BrandStory,
+		BrandStoryEn:        item.BrandStoryEn,
 	}, nil
 }
 

@@ -34,6 +34,7 @@ type PmsProduct struct {
 	FeightTemplateId           int64     `json:"feightTemplateId"`           //
 	ProductAttributeCategoryId int64     `json:"productAttributeCategoryId"` //
 	Name                       string    `json:"name"`                       //
+	NameEn                     string    `json:"nameEn"`                     //
 	Pic                        string    `json:"pic"`                        //
 	ProductSn                  string    `json:"productSn"`                  // 货号
 	DeleteStatus               int32     `json:"deleteStatus"`               // 删除状态：0->未删除；1->已删除
@@ -49,7 +50,9 @@ type PmsProduct struct {
 	GiftPoint                  int32     `json:"giftPoint"`                  // 赠送的积分
 	UsePointLimit              int32     `json:"usePointLimit"`              // 限制使用的积分数
 	SubTitle                   string    `json:"subTitle"`                   // 副标题
+	SubTitleEn                 string    `json:"subTitleEn"`                 // 副标题 E 文
 	Description                string    `json:"description"`                // 商品描述
+	DescriptionEn              string    `json:"descriptionEn"`              // 商品描述 E 文
 	OriginalPrice              float64   `json:"originalPrice"`              // 市场价
 	Stock                      int32     `json:"stock"`                      // 库存
 	LowStock                   int32     `json:"lowStock"`                   // 库存预警值
@@ -69,9 +72,11 @@ type PmsProduct struct {
 	PromotionPerLimit          int32     `json:"promotionPerLimit"`          // 活动限购数量
 	PromotionType              int32     `json:"promotionType"`              // 促销类型：0->没有促销使用原价;1->使用促销价；2->使用会员价；3->使用阶梯价格；4->使用满减价格；5->限时购
 	BrandName                  string    `json:"brandName"`                  // 品牌名称
+	BrandNameEn                string    `json:"brandNameEn"`                // 品牌名称
 	ProductCategoryName        string    `json:"productCategoryName"`        // 商品分类名称
-}
+	ProductCategoryNameEn      string    `json:"productCategoryNameEn"`      // 商品分类名称
 
+}
 type PmsProductLadder struct {
 	Id        int64   `json:"id"`        //
 	ProductId int64   `json:"productId"` //
@@ -92,7 +97,7 @@ type PmsMemberPrice struct {
 	ProductId       int64   `json:"productId"`       //
 	MemberLevelId   int64   `json:"memberLevelId"`   //
 	MemberPrice     float64 `json:"memberPrice"`     // 会员价格
-	MemberLevelName string  `json:"memberLevelName"` //
+	MemberLevelName string  `json:"memberLevelName"` //  Jacky.xie 是否需要英文
 }
 
 // PmsPortalProductDetail 前台商品详情

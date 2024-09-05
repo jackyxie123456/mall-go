@@ -10,7 +10,8 @@ import (
 )
 
 type getCartProductRequest struct {
-	ProductId int64 `uri:"productId" binding:"required"` // 商品ID
+	ProductId int64  `uri:"productId" binding:"required"` // 商品ID
+	Locale    string `form:"locale" default=zh`           // locale
 }
 
 type getCartProductResponse struct {
@@ -36,7 +37,7 @@ func (h *handler) GetCartProduct(ctx *gin.Context) {
 		return
 	}
 
-	data, err := h.service.GetCartProduct(ctx, req.ProductId)
+	data, err := h.service.GetCartProduct(ctx, req.ProductId, req.Locale) //jacky.xie @2024.09.01 未测试
 	if err != nil {
 		log.WithTrace(ctx).Error(err)
 		api.Failed(ctx, err.Error())

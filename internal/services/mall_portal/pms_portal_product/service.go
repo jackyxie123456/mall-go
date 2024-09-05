@@ -11,6 +11,7 @@ import (
 	"github.com/ChangSZ/mall-go/internal/repository/mysql/pms_product"
 	"github.com/ChangSZ/mall-go/internal/repository/mysql/pms_product_attribute"
 	"github.com/ChangSZ/mall-go/internal/repository/mysql/pms_product_attribute_value"
+
 	"github.com/ChangSZ/mall-go/internal/repository/mysql/pms_product_category"
 	"github.com/ChangSZ/mall-go/internal/repository/mysql/pms_product_full_reduction"
 	"github.com/ChangSZ/mall-go/internal/repository/mysql/pms_product_ladder"
@@ -27,7 +28,18 @@ func New() Service {
 func (s *service) i() {}
 
 func (s *service) Search(ctx context.Context, keyword string, brandId, productCategoryId int64,
+	pageNum, pageSize, sort int, locale string) ([]dto.PmsProduct, int64, error) {
+
+	if locale == "en" || locale == "EN" {
+		return s.search_en(ctx, keyword, brandId, productCategoryId, pageNum, pageSize, sort)
+	} else {
+		return s.search_zh(ctx, keyword, brandId, productCategoryId, pageNum, pageSize, sort)
+	}
+}
+
+func (s *service) search_zh(ctx context.Context, keyword string, brandId, productCategoryId int64,
 	pageNum, pageSize, sort int) ([]dto.PmsProduct, int64, error) {
+
 	qb := pms_product.NewQueryBuilder().
 		WhereDeleteStatus(mysql.EqualPredicate, 0).
 		WherePublishStatus(mysql.EqualPredicate, 1)
@@ -68,12 +80,75 @@ func (s *service) Search(ctx context.Context, keyword string, brandId, productCa
 	for _, v := range list {
 		tmp := dto.PmsProduct{}
 		copy.AssignStruct(v, &tmp)
+		//
 		listData = append(listData, tmp)
 	}
 	return listData, count, nil
 }
 
-func (s *service) CategoryTreeList(ctx context.Context) ([]dto.PmsProductCategoryNode, error) {
+func (s *service) search_en(ctx context.Context, keyword string, brandId, productCategoryId int64,
+	pageNum, pageSize, sort int) ([]dto.PmsProduct, int64, error) {
+
+	qb := pms_product.NewQueryBuilder().
+		WhereDeleteStatus(mysql.EqualPredicate, 0).
+		WherePublishStatus(mysql.EqualPredicate, 1)
+	if keyword != "" {
+		qb = qb.WhereName(mysql.LikePredicate, "%"+keyword+"%")
+	}
+	if brandId != 0 {
+		qb = qb.WhereBrandId(mysql.EqualPredicate, brandId)
+	}
+	if productCategoryId != 0 {
+		qb = qb.WhereProductCategoryId(mysql.EqualPredicate, productCategoryId)
+	}
+	// 1->按新品；2->按销量；3->价格从低到高；4->价格从高到低
+	switch sort {
+	case 1:
+		qb = qb.OrderById(false)
+	case 2:
+		qb = qb.OrderBySale(false)
+	case 3:
+		qb = qb.OrderByPrice(true)
+	case 4:
+		qb = qb.OrderByPrice(false)
+	}
+	count, err := qb.Count(mysql.DB().GetDbR().WithContext(ctx))
+	if err != nil {
+		return nil, 0, err
+	}
+	offset := (pageNum - 1) * pageSize
+	list, err := qb.
+		Limit(pageSize).
+		Offset(offset).
+		QueryAll(mysql.DB().GetDbR().WithContext(ctx))
+	if err != nil {
+		return nil, 0, err
+	}
+
+	listData := make([]dto.PmsProduct, 0, len(list))
+	for _, v := range list {
+		tmp := dto.PmsProduct{}
+		copy.AssignStruct(v, &tmp) // Jacky.xie 2024.09.01
+		// 处理 locale
+		tmp.Name = v.NameEn                               // locale en 情况下使用 EN 属性
+		tmp.SubTitle = v.SubTitleEn                       //
+		tmp.ProductCategoryName = v.ProductCategoryNameEn //
+		tmp.BrandName = v.BrandNameEn
+
+		listData = append(listData, tmp)
+	}
+	return listData, count, nil
+}
+
+func (s *service) CategoryTreeList(ctx context.Context, locale string) ([]dto.PmsProductCategoryNode, error) {
+	if locale == "en" || locale == "EN" {
+		return s.categoryTreeList_en(ctx)
+	} else {
+		return s.categoryTreeList_zh(ctx)
+	}
+}
+
+func (s *service) categoryTreeList_zh(ctx context.Context) ([]dto.PmsProductCategoryNode, error) {
 	allList, err := pms_product_category.NewQueryBuilder().
 		QueryAll(mysql.DB().GetDbR().WithContext(ctx))
 	if err != nil {
@@ -84,6 +159,36 @@ func (s *service) CategoryTreeList(ctx context.Context) ([]dto.PmsProductCategor
 	for _, v := range allList {
 		tmp := dto.PmsProductCategory{}
 		copy.AssignStruct(v, &tmp)
+		listData = append(listData, tmp)
+	}
+
+	var result = make([]dto.PmsProductCategoryNode, 0)
+	for _, item := range listData {
+		if item.ParentId == 0 {
+			node := s.covert(item, listData)
+			result = append(result, node)
+		}
+	}
+	return result, nil
+}
+
+func (s *service) categoryTreeList_en(ctx context.Context) ([]dto.PmsProductCategoryNode, error) {
+	allList, err := pms_product_category.NewQueryBuilder().
+		QueryAll(mysql.DB().GetDbR().WithContext(ctx))
+	if err != nil {
+		return nil, err
+	}
+
+	listData := make([]dto.PmsProductCategory, 0, len(allList))
+	for _, v := range allList {
+		tmp := dto.PmsProductCategory{}
+		copy.AssignStruct(v, &tmp)
+		//locale process  jacky.xie@2024.09.01
+		tmp.ProductUnit = v.ProductUnitEn
+		tmp.Description = v.DescriptionEn
+		tmp.Keywords = v.KeywordsEn
+		tmp.Name = v.NameEn
+
 		listData = append(listData, tmp)
 	}
 
@@ -111,7 +216,16 @@ func (s *service) covert(item dto.PmsProductCategory, allList []dto.PmsProductCa
 	return node
 }
 
-func (s *service) Detail(ctx context.Context, id int64) (*dto.PmsPortalProductDetail, error) {
+func (s *service) Detail(ctx context.Context, id int64, locale string) (*dto.PmsPortalProductDetail, error) {
+
+	if locale == "en" || locale == "EN" {
+		return s.detail_en(ctx, id)
+	} else {
+		return s.detail_zh(ctx, id)
+	}
+}
+
+func (s *service) detail_zh(ctx context.Context, id int64) (*dto.PmsPortalProductDetail, error) {
 	result := &dto.PmsPortalProductDetail{}
 	// 获取商品信息
 	product, err := pms_product.NewQueryBuilder().
@@ -144,6 +258,7 @@ func (s *service) Detail(ctx context.Context, id int64) (*dto.PmsPortalProductDe
 	if err != nil {
 		return nil, err
 	}
+
 	if len(productAttributeList) > 0 {
 		result.ProductAttributeList = make([]dto.PmsProductAttribute, 0, len(productAttributeList))
 		attributeIds := make([]int64, 0, len(productAttributeList))
@@ -181,6 +296,135 @@ func (s *service) Detail(ctx context.Context, id int64) (*dto.PmsPortalProductDe
 	for _, v := range skuStockList {
 		tmp := dto.PmsSkuStock{}
 		copy.AssignStruct(v, &tmp)
+		result.SkuStockList = append(result.SkuStockList, tmp)
+	}
+
+	switch product.PromotionType {
+	case 3: // 商品阶梯价格设置
+		productLadderList, err := pms_product_ladder.NewQueryBuilder().
+			WhereProductId(mysql.EqualPredicate, id).
+			QueryAll(mysql.DB().GetDbR().WithContext(ctx))
+		if err != nil {
+			return nil, err
+		}
+		result.ProductLadderList = make([]dto.PmsProductLadder, 0, len(productLadderList))
+		for _, v := range productLadderList {
+			tmp := dto.PmsProductLadder{}
+			copy.AssignStruct(v, &tmp)
+			result.ProductLadderList = append(result.ProductLadderList, tmp)
+		}
+	case 4: // 商品满减价格设置
+		productFullReductionList, err := pms_product_full_reduction.NewQueryBuilder().
+			WhereProductId(mysql.EqualPredicate, id).
+			QueryAll(mysql.DB().GetDbR().WithContext(ctx))
+		if err != nil {
+			return nil, err
+		}
+		result.ProductFullReductionList = make([]dto.PmsProductFullReduction, 0, len(productFullReductionList))
+		for _, v := range productFullReductionList {
+			tmp := dto.PmsProductFullReduction{}
+			copy.AssignStruct(v, &tmp)
+			result.ProductFullReductionList = append(result.ProductFullReductionList, tmp)
+		}
+	}
+
+	// 商品可用优惠券
+	couponList, err := new(dao.CouponDao).GetAvailableCouponList(
+		ctx, mysql.DB().GetDbR().WithContext(ctx), id, product.ProductCategoryId)
+	if err != nil {
+		return nil, fmt.Errorf("查询优惠券失败")
+	}
+	result.CouponList = make([]dto.SmsCoupon, 0, len(couponList))
+	for _, v := range couponList {
+		tmp := dto.SmsCoupon{}
+		copy.AssignStruct(v, &tmp)
+		result.CouponList = append(result.CouponList, tmp)
+	}
+	return result, nil
+}
+
+func (s *service) detail_en(ctx context.Context, id int64) (*dto.PmsPortalProductDetail, error) {
+	result := &dto.PmsPortalProductDetail{}
+	// 获取商品信息
+	product, err := pms_product.NewQueryBuilder().
+		WhereId(mysql.EqualPredicate, id).
+		First(mysql.DB().GetDbR().WithContext(ctx))
+	if err != nil {
+		return nil, err
+	}
+	if product.Id == 0 {
+		return nil, fmt.Errorf("未找到该商品")
+	}
+
+	copy.AssignStruct(product, &result.Product)
+	result.Product.BrandName = product.BrandNameEn //locale jacky.xie@20240901
+	result.Product.Name = product.NameEn           //
+	result.Product.SubTitle = product.SubTitleEn   //
+
+	// 获取品牌信息
+	brand, err := pms_brand.NewQueryBuilder().
+		WhereId(mysql.EqualPredicate, product.BrandId).
+		First(mysql.DB().GetDbR().WithContext(ctx))
+	if err != nil {
+		return nil, err
+	}
+	if brand.Id == 0 {
+		return nil, fmt.Errorf("未找到商品的品牌信息")
+	}
+	copy.AssignStruct(brand, &result.Brand)
+	result.Brand.BrandStory = brand.BrandStoryEn
+	result.Brand.Name = brand.NameEn // locale jacky.xie@2024.09.01
+
+	// 获取商品属性信息
+	productAttributeList, err := pms_product_attribute.NewQueryBuilder().
+		WhereProductAttributeCategoryId(mysql.EqualPredicate, product.ProductAttributeCategoryId).
+		QueryAll(mysql.DB().GetDbR().WithContext(ctx))
+	if err != nil {
+		return nil, err
+	}
+
+	if len(productAttributeList) > 0 {
+		result.ProductAttributeList = make([]dto.PmsProductAttribute, 0, len(productAttributeList))
+		attributeIds := make([]int64, 0, len(productAttributeList))
+		for _, v := range productAttributeList {
+			attributeIds = append(attributeIds, v.Id)
+			tmp := dto.PmsProductAttribute{}
+			copy.AssignStruct(v, &tmp)
+
+			tmp.Name = v.NameEn           //jacky.xie @20240901
+			tmp.InputList = v.InputListEn // local == en
+			result.ProductAttributeList = append(result.ProductAttributeList, tmp)
+		}
+
+		// 获取商品属性值信息
+		productAttributeValueList, err := pms_product_attribute_value.NewQueryBuilder().
+			WhereProductId(mysql.EqualPredicate, id).
+			WhereProductAttributeIdIn(attributeIds).
+			QueryAll(mysql.DB().GetDbR().WithContext(ctx))
+		if err != nil {
+			return nil, err
+		}
+		result.ProductAttributeValueList = make([]dto.PmsProductAttributeValue, 0, len(productAttributeValueList))
+		for _, v := range productAttributeValueList {
+			tmp := dto.PmsProductAttributeValue{} //jacky.xie to do
+			copy.AssignStruct(v, &tmp)
+			tmp.Value = v.ValueEn // locale 处理
+			result.ProductAttributeValueList = append(result.ProductAttributeValueList, tmp)
+		}
+	}
+
+	// 获取商品SKU库存信息
+	skuStockList, err := pms_sku_stock.NewQueryBuilder().
+		WhereProductId(mysql.EqualPredicate, id).
+		QueryAll(mysql.DB().GetDbR().WithContext(ctx))
+	if err != nil {
+		return nil, err
+	}
+	result.SkuStockList = make([]dto.PmsSkuStock, 0, len(skuStockList))
+	for _, v := range skuStockList {
+		tmp := dto.PmsSkuStock{}
+		copy.AssignStruct(v, &tmp) // jacky.xie@2024.09.01
+		// sku sp 数据 ,同时输出 zh 和 en
 		result.SkuStockList = append(result.SkuStockList, tmp)
 	}
 

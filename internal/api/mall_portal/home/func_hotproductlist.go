@@ -10,8 +10,9 @@ import (
 )
 
 type hotProductListRequest struct {
-	PageNum  int `form:"pageNum,default=1" binding:"omitempty"`
-	PageSize int `form:"pageSize,default=6" binding:"omitempty"`
+	PageNum  int    `form:"pageNum,default=1" binding:"omitempty"`
+	PageSize int    `form:"pageSize,default=6" binding:"omitempty"`
+	Locale   string `form:"locale,default=zh" binding:"omitempty"` //jacky.xie@2024-08-31
 }
 
 type hotProductListResponse struct {
@@ -37,7 +38,7 @@ func (h *handler) HotProductList(ctx *gin.Context) {
 		return
 	}
 
-	list, err := h.service.HotProductList(ctx, req.PageNum, req.PageSize)
+	list, err := h.service.HotProductList(ctx, req.PageNum, req.PageSize, req.Locale) //jacky.xie@2024-08-31
 	if err != nil {
 		log.WithTrace(ctx).Error(err)
 		api.Failed(ctx, err.Error())

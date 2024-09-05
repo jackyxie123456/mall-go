@@ -6,6 +6,8 @@ COPY . .
 RUN go build -o bin/portal cmd/mall_portal/main.go
 
 FROM alpine:latest
+#FROM registry.hexcloud.cn/devops/alpine_runtime:latest
+
 WORKDIR /work
 COPY --from=builder /work/bin/. .
 COPY --from=builder /work/configs  ./configs

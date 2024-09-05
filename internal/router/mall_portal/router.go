@@ -3,7 +3,6 @@ package mall_portal
 import (
 	_ "github.com/ChangSZ/mall-go/docs"
 	"github.com/ChangSZ/mall-go/internal/router"
-
 	"github.com/gin-gonic/gin"
 )
 

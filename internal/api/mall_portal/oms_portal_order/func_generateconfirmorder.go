@@ -11,6 +11,7 @@ import (
 
 type generateConfirmOrderRequest struct {
 	CartIds []int64 `json:"cartIds"`
+	Locale  string
 }
 
 type generateConfirmOrderResponse struct {
@@ -28,7 +29,7 @@ type generateConfirmOrderResponse struct {
 // @Failure 400 {object} code.Failure
 // @Router /order/generateConfirmOrder [post]
 func (h *handler) GenerateConfirmOrder(ctx *gin.Context) {
-	_ = new(generateConfirmOrderRequest)
+	req1 := new(generateConfirmOrderRequest)
 	req := make([]int64, 0)
 	res := new(generateConfirmOrderResponse)
 	if err := ctx.ShouldBind(&req); err != nil {
@@ -36,8 +37,8 @@ func (h *handler) GenerateConfirmOrder(ctx *gin.Context) {
 		api.ValidateFailed(ctx, validator.GetValidationError(err).Error())
 		return
 	}
-
-	data, err := h.service.GenerateConfirmOrder(ctx, req)
+	// jacky.xie@2024.09.01 未测试
+	data, err := h.service.GenerateConfirmOrder(ctx, req, req1.Locale)
 	if err != nil {
 		log.WithTrace(ctx).Error(err)
 		api.Failed(ctx, err.Error())

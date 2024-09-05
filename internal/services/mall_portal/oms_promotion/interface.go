@@ -16,5 +16,5 @@ type Service interface {
 	 * 计算购物车中的促销活动信息
 	 * @param cartItemList 购物车
 	 */
-	CalcCartPromotion(ctx context.Context, cartItemList []dto.OmsCartItem) ([]dto.CartPromotionItem, error)
+	CalcCartPromotion(ctx context.Context, cartItemList []dto.OmsCartItem, locale string) ([]dto.CartPromotionItem, error)
 }

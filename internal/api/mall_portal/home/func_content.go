@@ -5,10 +5,13 @@ import (
 	"github.com/ChangSZ/mall-go/internal/dto"
 	"github.com/ChangSZ/mall-go/pkg/log"
 
+	"github.com/ChangSZ/mall-go/pkg/validator"
 	"github.com/gin-gonic/gin"
 )
 
-type contentRequest struct{}
+type contentRequest struct {
+	Locale string `form:"locale,default=zh" binding:"omitempty"` //jacky.xie@2024-08-31
+}
 
 type contentResponse struct {
 	dto.HomeContentResult `json:",inline"`
@@ -25,10 +28,16 @@ type contentResponse struct {
 // @Failure 400 {object} code.Failure
 // @Router /home/content [get]
 func (h *handler) Content(ctx *gin.Context) {
-	_ = new(contentRequest)
+	req := new(contentRequest)
 	res := new(contentResponse)
 
-	data, err := h.service.Content(ctx)
+	if err := ctx.ShouldBind(req); err != nil {
+		log.WithTrace(ctx).Error(err)
+		api.ValidateFailed(ctx, validator.GetValidationError(err).Error())
+		return
+	}
+
+	data, err := h.service.Content(ctx, req.Locale) //jacky.xie@2024-08-31
 	if err != nil {
 		log.WithTrace(ctx).Error(err)
 		api.Failed(ctx, err.Error())

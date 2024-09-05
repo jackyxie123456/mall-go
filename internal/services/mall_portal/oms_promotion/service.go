@@ -20,13 +20,13 @@ func New() Service {
 
 func (s *service) i() {}
 
-func (s *service) CalcCartPromotion(ctx context.Context, cartItemList []dto.OmsCartItem) (
+func (s *service) CalcCartPromotion(ctx context.Context, cartItemList []dto.OmsCartItem, locale string) (
 	[]dto.CartPromotionItem, error) {
 	// 1.先根据productId对CartItem进行分组，以spu为单位进行计算优惠
 	productCartMap := s.GroupCartItemBySpu(cartItemList)
 
 	// 2.查询所有商品的优惠相关信息
-	promotionProductList, err := s.GetPromotionProductList(ctx, cartItemList)
+	promotionProductList, err := s.GetPromotionProductList(ctx, cartItemList, locale)
 	if err != nil {
 		return nil, err
 	}
@@ -41,7 +41,12 @@ func (s *service) CalcCartPromotion(ctx context.Context, cartItemList []dto.OmsC
 			for _, item := range itemList {
 				cartPromotionItem := dto.CartPromotionItem{}
 				copy.AssignStruct(&item, &cartPromotionItem)
-				cartPromotionItem.PromotionMessage = "单品促销"
+
+				if locale == "en" || locale == "EN" {
+					cartPromotionItem.PromotionMessage = "Single Goods Promotion"
+				} else {
+					cartPromotionItem.PromotionMessage = "单品促销"
+				}
 				// 商品原价-促销价
 				skuStock := s.GetOriginalPrice(*promotionProduct, item.ProductSkuId)
 				originalPrice := skuStock.Price
@@ -60,7 +65,7 @@ func (s *service) CalcCartPromotion(ctx context.Context, cartItemList []dto.OmsC
 				for _, item := range itemList {
 					cartPromotionItem := dto.CartPromotionItem{}
 					copy.AssignStruct(&item, &cartPromotionItem)
-					cartPromotionItem.PromotionMessage = s.GetLadderPromotionMessage(*ladder)
+					cartPromotionItem.PromotionMessage = s.GetLadderPromotionMessage(*ladder, locale)
 					// 商品原价-折扣*商品原价
 					skuStock := s.GetOriginalPrice(*promotionProduct, item.ProductSkuId)
 					originalPrice := skuStock.Price
@@ -71,7 +76,7 @@ func (s *service) CalcCartPromotion(ctx context.Context, cartItemList []dto.OmsC
 					cartPromotionItemList = append(cartPromotionItemList, cartPromotionItem)
 				}
 			} else {
-				cartPromotionItemList = s.HandleNoReduce(cartPromotionItemList, itemList, *promotionProduct)
+				cartPromotionItemList = s.HandleNoReduce(cartPromotionItemList, itemList, *promotionProduct, locale)
 			}
 		case 4: // 满减
 			totalAmount := s.GetCartItemAmount(itemList, promotionProductList)
@@ -80,7 +85,7 @@ func (s *service) CalcCartPromotion(ctx context.Context, cartItemList []dto.OmsC
 				for _, item := range itemList {
 					cartPromotionItem := dto.CartPromotionItem{}
 					copy.AssignStruct(&item, &cartPromotionItem)
-					cartPromotionItem.PromotionMessage = s.GetFullReductionPromotionMessage(*fullReduction)
+					cartPromotionItem.PromotionMessage = s.GetFullReductionPromotionMessage(*fullReduction, locale)
 					// (商品原价/总价)*满减金额
 					skuStock := s.GetOriginalPrice(*promotionProduct, item.ProductSkuId)
 					originalPrice := skuStock.Price
@@ -93,23 +98,23 @@ func (s *service) CalcCartPromotion(ctx context.Context, cartItemList []dto.OmsC
 					cartPromotionItemList = append(cartPromotionItemList, cartPromotionItem)
 				}
 			} else {
-				cartPromotionItemList = s.HandleNoReduce(cartPromotionItemList, itemList, *promotionProduct)
+				cartPromotionItemList = s.HandleNoReduce(cartPromotionItemList, itemList, *promotionProduct, locale)
 			}
 		default:
-			cartPromotionItemList = s.HandleNoReduce(cartPromotionItemList, itemList, *promotionProduct)
+			cartPromotionItemList = s.HandleNoReduce(cartPromotionItemList, itemList, *promotionProduct, locale)
 		}
 	}
 	return cartPromotionItemList, nil
 }
 
 // GetPromotionProductList 查询所有商品的优惠相关信息
-func (s *service) GetPromotionProductList(ctx context.Context, cartItemList []dto.OmsCartItem) (
+func (s *service) GetPromotionProductList(ctx context.Context, cartItemList []dto.OmsCartItem, locale string) (
 	[]dto.PromotionProduct, error) {
 	productIdList := make([]int64, len(cartItemList))
 	for _, cartItem := range cartItemList {
 		productIdList = append(productIdList, cartItem.ProductId)
 	}
-	return new(dao.ProductDao).GetPromotionProductList(ctx, mysql.DB().GetDbR().WithContext(ctx), productIdList)
+	return new(dao.ProductDao).GetPromotionProductList(ctx, mysql.DB().GetDbR().WithContext(ctx), productIdList, locale)
 }
 
 // GroupCartItemBySpu 以spu为单位对购物车中商品进行分组
@@ -128,17 +133,26 @@ func (s *service) GroupCartItemBySpu(cartItemList []dto.OmsCartItem) map[int64][
 }
 
 // GetFullReductionPromotionMessage 获取满减促销消息
-func (s *service) GetFullReductionPromotionMessage(fullReduction dto.PmsProductFullReduction) string {
-	return fmt.Sprintf("满减优惠: 满%v元减%v元", fullReduction.FullPrice, fullReduction.ReducePrice)
+func (s *service) GetFullReductionPromotionMessage(fullReduction dto.PmsProductFullReduction, locale string) string {
+	// locale todo @jacky.xie@2024.09.01
+	if locale == "en" || locale == "EN" {
+		return fmt.Sprintf("Discount for bulk purchase: more than%v minus%v ", fullReduction.FullPrice, fullReduction.ReducePrice)
+	} else {
+		return fmt.Sprintf("满减优惠: 满%v元减%v元", fullReduction.FullPrice, fullReduction.ReducePrice)
+	}
 }
 
 // HandleNoReduce 对没满足优惠条件的商品进行处理
 func (s *service) HandleNoReduce(cartPromotionItemList []dto.CartPromotionItem,
-	itemList []dto.OmsCartItem, promotionProduct dto.PromotionProduct) []dto.CartPromotionItem {
+	itemList []dto.OmsCartItem, promotionProduct dto.PromotionProduct, locale string) []dto.CartPromotionItem {
 	for _, item := range itemList {
 		cartPromotionItem := dto.CartPromotionItem{}
 		copy.AssignStruct(&item, &cartPromotionItem)
-		cartPromotionItem.PromotionMessage = "无优惠"
+		if locale == "en" || locale == "EN" {
+			cartPromotionItem.PromotionMessage = "No Promotion" // locale todo @jacky.xie@2024.09.01
+		} else {
+			cartPromotionItem.PromotionMessage = "无优惠" // locale todo @jacky.xie@2024.09.01
+		}
 		cartPromotionItem.ReduceAmount = 0
 		skuStock := s.GetOriginalPrice(promotionProduct, item.ProductSkuId)
 		if skuStock != nil {
@@ -168,8 +182,13 @@ func (s *service) GetProductFullReduction(totalAmount float64,
 }
 
 // GetLadderPromotionMessage 获取打折优惠的促销信息
-func (s *service) GetLadderPromotionMessage(ladder dto.PmsProductLadder) string {
-	return fmt.Sprintf("打折优惠: 满%v件, 打%v折", ladder.Count, ladder.Discount)
+func (s *service) GetLadderPromotionMessage(ladder dto.PmsProductLadder, locale string) string {
+	// locale todo @jacky.xie@2024.09.01
+	if locale == "en" || locale == "EN" {
+		return fmt.Sprintf("Discount: more than%v Unit, take %v off", ladder.Count, ladder.Discount)
+	} else {
+		return fmt.Sprintf("打折优惠: 满%v件, 打%v折", ladder.Count, ladder.Discount)
+	}
 }
 
 // GetProductLadder 根据购买商品数量获取满足条件的打折优惠策略

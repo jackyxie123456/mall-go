@@ -2,6 +2,7 @@ package dto
 
 type PmsBrandParam struct {
 	Name                string `json:"name" binding:"required"`
+	NameEn              string `json:"nameEn"`
 	FirstLetter         string `json:"firstLetter"`
 	Sort                int32  `json:"sort" binding:"omitempty,gte=0"`
 	FactoryStatus       int32  `json:"factoryStatus" binding:"omitempty,oneof=0 1"`
@@ -11,11 +12,13 @@ type PmsBrandParam struct {
 	Logo                string `json:"logo" binding:"required"`
 	BigPic              string `json:"bigPic"`
 	BrandStory          string `json:"brandStory"`
+	BrandStoryEn        string `json:"brandStoryEn"`
 }
 
 type PmsBrand struct {
 	Id                  int64  `json:"id"`
 	Name                string `json:"name"`
+	NameEn              string `json:"nameEn"`
 	FirstLetter         string `json:"firstLetter"`
 	Sort                int32  `json:"sort"`
 	FactoryStatus       int32  `json:"factoryStatus"`
@@ -25,4 +28,5 @@ type PmsBrand struct {
 	Logo                string `json:"logo"`
 	BigPic              string `json:"bigPic"`
 	BrandStory          string `json:"brandStory"`
+	BrandStoryEn        string `json:"brandStoryEn"`
 }

@@ -10,7 +10,8 @@ import (
 )
 
 type getProductCateListRequest struct {
-	ParentId int64 `uri:"parentId"`
+	ParentId int64  `uri:"parentId"`
+	Locale   string `uri:"locale"` //jacky.xie@2024-08-31
 }
 
 type getProductCateListResponse struct {
@@ -26,7 +27,7 @@ type getProductCateListResponse struct {
 // @Param Request body getProductCateListRequest true "请求信息"
 // @Success 200 {object} code.Success{data=[]dto.PmsProductCategory}
 // @Failure 400 {object} code.Failure
-// @Router /home/productCateList/{parentId} [get]
+// @Router /home/productCateList/{parentId}/{locale} [get]
 func (h *handler) GetProductCateList(ctx *gin.Context) {
 	req := new(getProductCateListRequest)
 	res := new(getProductCateListResponse)
@@ -36,7 +37,7 @@ func (h *handler) GetProductCateList(ctx *gin.Context) {
 		return
 	}
 
-	data, err := h.service.GetProductCateList(ctx, req.ParentId)
+	data, err := h.service.GetProductCateList(ctx, req.ParentId, req.Locale) //jacky.xie@2024-08-31
 	if err != nil {
 		log.WithTrace(ctx).Error(err)
 		api.Failed(ctx, err.Error())

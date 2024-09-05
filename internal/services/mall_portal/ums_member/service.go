@@ -62,9 +62,11 @@ func (s *service) GetById(ctx context.Context, id int64) (*ums_member.UmsMember,
 
 func (s *service) Register(ctx context.Context, username, passwd, telephone, authCode string) error {
 	// 验证验证码
+	/*  //modified by jacky.xie@2024-08-23
 	if !s.verifyAuthCode(ctx, telephone, authCode) {
 		return fmt.Errorf("验证码错误")
 	}
+	*/
 	// 查询是否已有该用户
 	umsMembers, err := new(dao.UmsMemberDao).GetMembers(ctx, mysql.DB().GetDbR().WithContext(ctx), username, telephone)
 	if err != nil {

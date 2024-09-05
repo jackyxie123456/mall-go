@@ -10,7 +10,8 @@ import (
 )
 
 type detailRequest struct {
-	BrandId int64 `uri:"brandId" binding:"required"`
+	BrandId int64  `uri:"brandId" binding:"required"`
+	Locale  string `form:"locale,default=zh" binding:"omitempty"` //jacky.xie@2024-08-31
 }
 
 type detailResponse struct {
@@ -26,7 +27,7 @@ type detailResponse struct {
 // @Param Request body detailRequest true "请求信息"
 // @Success 200 {object} code.Success{data=detailResponse}
 // @Failure 400 {object} code.Failure
-// @Router /brand/detail/{brandId} [get]
+// @Router /brand/detail/{brandId}?locale=en [get]
 func (h *handler) Detail(ctx *gin.Context) {
 	req := new(detailRequest)
 	res := new(detailResponse)
@@ -36,7 +37,13 @@ func (h *handler) Detail(ctx *gin.Context) {
 		return
 	}
 
-	data, err := h.service.Detail(ctx, req.BrandId)
+	if err := ctx.ShouldBind(req); err != nil {
+		log.WithTrace(ctx).Error(err)
+		api.ValidateFailed(ctx, validator.GetValidationError(err).Error())
+		return
+	}
+
+	data, err := h.service.Detail(ctx, req.BrandId, req.Locale) //jacky.xie@2024-08-31
 	if err != nil {
 		log.WithTrace(ctx).Error(err)
 		api.Failed(ctx, err.Error())

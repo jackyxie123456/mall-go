@@ -3,6 +3,7 @@ package configs
 import (
 	"bytes"
 	_ "embed"
+	"fmt"
 	"io"
 	"os"
 	"path/filepath"
@@ -168,6 +169,18 @@ func init() {
 		if err := viper.WriteConfig(); err != nil {
 			panic(err)
 		}
+	} else {
+		err := viper.ReadInConfig()
+		if err != nil {
+			print("Init config failed.")
+			panic(err)
+		}
+
+		if err := viper.Unmarshal(&config); err != nil {
+			print("Init config failed.")
+		}
+
+		fmt.Println("+v", config.MySQL)
 	}
 
 	viper.WatchConfig()

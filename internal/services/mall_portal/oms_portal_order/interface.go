@@ -15,12 +15,12 @@ type Service interface {
 	/**
 	 * 根据用户购物车信息生成确认单信息
 	 */
-	GenerateConfirmOrder(ctx context.Context, cartIds []int64) (*dto.ConfirmOrderResult, error)
+	GenerateConfirmOrder(ctx context.Context, cartIds []int64, locale string) (*dto.ConfirmOrderResult, error)
 
 	/**
 	 * 根据提交信息生成订单
 	 */
-	GenerateOrder(ctx context.Context, orderParam dto.OrderParam) (*dto.Order, error)
+	GenerateOrder(ctx context.Context, orderParam dto.OrderParam, locale string) (*dto.Order, error)
 
 	/**
 	 * 支付成功后的回调

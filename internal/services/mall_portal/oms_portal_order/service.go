@@ -39,14 +39,14 @@ func New() Service {
 
 func (s *service) i() {}
 
-func (s *service) GenerateConfirmOrder(ctx context.Context, cartIds []int64) (*dto.ConfirmOrderResult, error) {
+func (s *service) GenerateConfirmOrder(ctx context.Context, cartIds []int64, locale string) (*dto.ConfirmOrderResult, error) {
 	result := &dto.ConfirmOrderResult{}
 	// 获取购物车信息
 	currentMember, err := ums_member.New().GetCurrentMember(ctx)
 	if err != nil {
 		return nil, err
 	}
-	cartPromotionItemList, err := oms_cart_item.New().ListPromotion(ctx, cartIds)
+	cartPromotionItemList, err := oms_cart_item.New().ListPromotion(ctx, cartIds, locale)
 	if err != nil {
 		return nil, err
 	}
@@ -86,7 +86,7 @@ func (s *service) GenerateConfirmOrder(ctx context.Context, cartIds []int64) (*d
 	return result, nil
 }
 
-func (s *service) GenerateOrder(ctx context.Context, orderParam dto.OrderParam) (*dto.Order, error) {
+func (s *service) GenerateOrder(ctx context.Context, orderParam dto.OrderParam, locale string) (*dto.Order, error) {
 	// 校验收货地址
 	if orderParam.MemberReceiveAddressId == 0 {
 		return nil, fmt.Errorf("请选择收货地址！")
@@ -96,7 +96,7 @@ func (s *service) GenerateOrder(ctx context.Context, orderParam dto.OrderParam) 
 	if err != nil {
 		return nil, err
 	}
-	cartPromotionItemList, err := oms_cart_item.New().ListPromotion(ctx, orderParam.CartIds)
+	cartPromotionItemList, err := oms_cart_item.New().ListPromotion(ctx, orderParam.CartIds, locale)
 	if err != nil {
 		return nil, err
 	}

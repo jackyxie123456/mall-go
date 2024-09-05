@@ -15,6 +15,6 @@ func (t *UmsMemberDao) GetMembers(ctx context.Context, tx *gorm.DB, username, te
 	[]ums_member.UmsMember, error) {
 	res := make([]ums_member.UmsMember, 0)
 	err := tx.WithContext(ctx).Model(&ums_member.UmsMember{}).
-		Where("username = ? OR telephone = ?", username, telephone).Find(&res).Error
+		Where("username = ? OR phone = ?", username, telephone).Find(&res).Error
 	return res, err
 }

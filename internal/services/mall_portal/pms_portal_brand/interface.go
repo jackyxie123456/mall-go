@@ -15,15 +15,18 @@ type Service interface {
 	/**
 	 * 分页获取推荐品牌
 	 */
-	RecommendList(ctx context.Context, pageNum, pageSize int) ([]dto.PmsBrand, error)
+	//jacky.xie@2024-08-31
+	RecommendList(ctx context.Context, pageNum, pageSize int, locale string) ([]dto.PmsBrand, error)
 
 	/**
 	 * 获取品牌详情
 	 */
-	Detail(ctx context.Context, brandId int64) (*dto.PmsBrand, error)
+	//jacky.xie@2024-08-31
+	Detail(ctx context.Context, brandId int64, locale string) (*dto.PmsBrand, error)
 
 	/**
 	 * 分页获取品牌关联商品
 	 */
-	ProductList(ctx context.Context, brandId int64, pageNum int, pageSize int) ([]dto.PmsProduct, int64, error)
+	//jacky.xie@2024-08-31
+	ProductList(ctx context.Context, brandId int64, pageNum int, pageSize int, locale string) ([]dto.PmsProduct, int64, error)
 }

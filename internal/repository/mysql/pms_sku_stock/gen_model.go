@@ -15,4 +15,5 @@ type PmsSkuStock struct {
 	PromotionPrice float64 // 单品促销价格
 	LockStock      int32   // 锁定库存
 	SpData         string  // 商品销售属性，json格式
+	SpDataEn       string  // 商品销售属性，json格式,EN
 }

@@ -11,6 +11,7 @@ import (
 
 type generateOrderRequest struct {
 	dto.OrderParam `json:",inline"`
+	Locale         string // jacky.xie@2024.09.01 未测试
 }
 
 type generateOrderResponse struct {
@@ -36,7 +37,7 @@ func (h *handler) GenerateOrder(ctx *gin.Context) {
 		return
 	}
 
-	data, err := h.service.GenerateOrder(ctx, req.OrderParam)
+	data, err := h.service.GenerateOrder(ctx, req.OrderParam, req.Locale) // jacky.xie@2024.09.01 未测试
 	if err != nil {
 		log.WithTrace(ctx).Error(err)
 		api.Failed(ctx, err.Error())

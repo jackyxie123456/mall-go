@@ -10,6 +10,7 @@ import (
 
 type listPromotionRequest struct {
 	CartIds []int64 `form:"cartIds"`
+	Locale  string  `form:"locale" default=zh`
 }
 
 type listPromotionResponse struct{}
@@ -33,7 +34,7 @@ func (h *handler) ListPromotion(ctx *gin.Context) {
 		return
 	}
 
-	list, err := h.service.ListPromotion(ctx, req.CartIds)
+	list, err := h.service.ListPromotion(ctx, req.CartIds, req.Locale) //jacky.xie @2024.09.01 未测试
 	if err != nil {
 		log.WithTrace(ctx).Error(err)
 		api.Failed(ctx, err.Error())

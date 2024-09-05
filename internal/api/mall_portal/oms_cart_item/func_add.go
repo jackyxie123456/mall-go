@@ -11,6 +11,7 @@ import (
 
 type addRequest struct {
 	dto.OmsCartItem `json:",inline"`
+	Locale          string `json:",inline"`
 }
 
 type addResponse struct {
@@ -36,7 +37,7 @@ func (h *handler) Add(ctx *gin.Context) {
 		return
 	}
 
-	count, err := h.service.Add(ctx, req.OmsCartItem)
+	count, err := h.service.Add(ctx, req.OmsCartItem, req.Locale) //jacky.xie @2024.09.01
 	if err != nil {
 		log.WithTrace(ctx).Error(err)
 		api.Failed(ctx, err.Error())

@@ -24,7 +24,8 @@ func New() Service {
 
 func (s *service) i() {}
 
-func (s *service) Content(ctx context.Context) (*dto.HomeContentResult, error) {
+// jacky.xie@2024-08-31
+func (s *service) Content(ctx context.Context, locale string) (*dto.HomeContentResult, error) {
 	result := &dto.HomeContentResult{}
 	{
 		// 获取首页广告
@@ -36,8 +37,8 @@ func (s *service) Content(ctx context.Context) (*dto.HomeContentResult, error) {
 	}
 
 	{
-		// 获取推荐品牌
-		data, err := new(dao.HomeDao).GetRecommendBrandList(ctx, mysql.DB().GetDbR().WithContext(ctx), 1, 6)
+		// 获取推荐品牌 //jacky.xie@2024-08-31
+		data, err := new(dao.HomeDao).GetRecommendBrandList(ctx, mysql.DB().GetDbR().WithContext(ctx), 1, 6, locale)
 		if err != nil {
 			return nil, err
 		}
@@ -54,8 +55,8 @@ func (s *service) Content(ctx context.Context) (*dto.HomeContentResult, error) {
 	}
 
 	{
-		// 获取新品推荐
-		data, err := new(dao.HomeDao).GetNewProductList(ctx, mysql.DB().GetDbR().WithContext(ctx), 1, 4)
+		// 获取新品推荐 //jacky.xie@2024-08-31
+		data, err := new(dao.HomeDao).GetNewProductList(ctx, mysql.DB().GetDbR().WithContext(ctx), 1, 4, locale)
 		if err != nil {
 			return nil, err
 		}
@@ -63,8 +64,8 @@ func (s *service) Content(ctx context.Context) (*dto.HomeContentResult, error) {
 	}
 
 	{
-		// 获取人气推荐
-		data, err := new(dao.HomeDao).GetHotProductList(ctx, mysql.DB().GetDbR().WithContext(ctx), 1, 4)
+		// 获取人气推荐  //jacky.xie@2024-08-31
+		data, err := new(dao.HomeDao).GetHotProductList(ctx, mysql.DB().GetDbR().WithContext(ctx), 1, 4, locale)
 		if err != nil {
 			return nil, err
 		}
@@ -83,45 +84,100 @@ func (s *service) Content(ctx context.Context) (*dto.HomeContentResult, error) {
 	return result, nil
 }
 
-func (s *service) RecommendProductList(ctx context.Context, pageNum, pageSize int) ([]dto.PmsProduct, error) {
+// jacky.xie@2024-08-31
+func (s *service) RecommendProductList(ctx context.Context, pageNum, pageSize int, locale string) ([]dto.PmsProduct, error) {
 	// 暂时默认推荐所有商品
 	offset := (pageNum - 1) * pageSize
-	list, err := pms_product.NewQueryBuilder().
-		WhereDeleteStatus(mysql.EqualPredicate, 0).
-		WherePublishStatus(mysql.EqualPredicate, 1).
-		Offset(offset).
-		Limit(pageSize).
-		QueryAll(mysql.DB().GetDbR().WithContext(ctx))
-	if err != nil {
-		return nil, err
-	}
 
-	listData := make([]dto.PmsProduct, 0, len(list))
-	for _, v := range list {
-		tmp := dto.PmsProduct{}
-		copy.AssignStruct(v, &tmp)
-		listData = append(listData, tmp)
+	if locale == "en" || locale == "EN" {
+
+		list, err := pms_product.NewQueryBuilder().
+			WhereDeleteStatus(mysql.EqualPredicate, 0).
+			WherePublishStatus(mysql.EqualPredicate, 1).
+			Offset(offset).
+			Limit(pageSize).
+			QueryAll(mysql.DB().GetDbR().WithContext(ctx))
+		if err != nil {
+			return nil, err
+		}
+
+		listData := make([]dto.PmsProduct, 0, len(list))
+		for _, v := range list {
+			tmp := dto.PmsProduct{}
+			copy.AssignStruct(v, &tmp)
+			tmp.BrandName = v.BrandNameEn                     // locale en 情况下使用 EN 属性
+			tmp.Name = v.NameEn                               //
+			tmp.ProductCategoryName = v.ProductCategoryNameEn //
+			tmp.Description = v.DescriptionEn
+			tmp.SubTitle = v.SubTitleEn
+			listData = append(listData, tmp)
+		}
+		return listData, nil
+	} else {
+		list, err := pms_product.NewQueryBuilder().
+			WhereDeleteStatus(mysql.EqualPredicate, 0).
+			WherePublishStatus(mysql.EqualPredicate, 1).
+			Offset(offset).
+			Limit(pageSize).
+			QueryAll(mysql.DB().GetDbR().WithContext(ctx))
+		if err != nil {
+			return nil, err
+		}
+
+		listData := make([]dto.PmsProduct, 0, len(list))
+		for _, v := range list {
+			tmp := dto.PmsProduct{}
+			copy.AssignStruct(v, &tmp)
+			listData = append(listData, tmp)
+		}
+		return listData, nil
 	}
-	return listData, nil
 }
 
-func (s *service) GetProductCateList(ctx context.Context, parentId int64) ([]dto.PmsProductCategory, error) {
-	list, err := pms_product_category.NewQueryBuilder().
-		WhereShowStatus(mysql.EqualPredicate, 1).
-		WhereParentId(mysql.EqualPredicate, parentId).
-		OrderBySort(false).
-		QueryAll(mysql.DB().GetDbR().WithContext(ctx))
-	if err != nil {
-		return nil, err
+func (s *service) GetProductCateList(ctx context.Context, parentId int64, locale string) ([]dto.PmsProductCategory, error) {
+
+	if locale == "en" {
+		list, err := pms_product_category.NewQueryBuilder().
+			WhereShowStatus(mysql.EqualPredicate, 1).
+			WhereParentId(mysql.EqualPredicate, parentId).
+			OrderBySort(false).
+			QueryAll(mysql.DB().GetDbR().WithContext(ctx))
+		if err != nil {
+			return nil, err
+		}
+
+		listData := make([]dto.PmsProductCategory, 0, len(list))
+		for _, v := range list {
+			tmp := dto.PmsProductCategory{}
+			copy.AssignStruct(v, &tmp)
+			tmp.Name = v.NameEn
+			tmp.ProductUnit = v.ProductUnitEn
+			tmp.Description = v.DescriptionEn
+			tmp.Keywords = v.KeywordsEn
+			//locale 处理  jacky.xie@2024.09.01
+
+			listData = append(listData, tmp)
+		}
+		return listData, nil
+	} else {
+		list, err := pms_product_category.NewQueryBuilder().
+			WhereShowStatus(mysql.EqualPredicate, 1).
+			WhereParentId(mysql.EqualPredicate, parentId).
+			OrderBySort(false).
+			QueryAll(mysql.DB().GetDbR().WithContext(ctx))
+		if err != nil {
+			return nil, err
+		}
+
+		listData := make([]dto.PmsProductCategory, 0, len(list))
+		for _, v := range list {
+			tmp := dto.PmsProductCategory{}
+			copy.AssignStruct(v, &tmp)
+			listData = append(listData, tmp)
+		}
+		return listData, nil
 	}
 
-	listData := make([]dto.PmsProductCategory, 0, len(list))
-	for _, v := range list {
-		tmp := dto.PmsProductCategory{}
-		copy.AssignStruct(v, &tmp)
-		listData = append(listData, tmp)
-	}
-	return listData, nil
 }
 
 func (s *service) GetSubjectList(ctx context.Context, cateId int64, pageNum, pageSize int) ([]dto.CmsSubject, error) {
@@ -146,12 +202,12 @@ func (s *service) GetSubjectList(ctx context.Context, cateId int64, pageNum, pag
 	return listData, nil
 }
 
-func (s *service) HotProductList(ctx context.Context, pageNum, pageSize int) ([]dto.PmsProduct, error) {
-	return new(dao.HomeDao).GetHotProductList(ctx, mysql.DB().GetDbR().WithContext(ctx), pageNum, pageSize)
+func (s *service) HotProductList(ctx context.Context, pageNum, pageSize int, locale string) ([]dto.PmsProduct, error) {
+	return new(dao.HomeDao).GetHotProductList(ctx, mysql.DB().GetDbR().WithContext(ctx), pageNum, pageSize, locale)
 }
 
-func (s *service) NewProductList(ctx context.Context, pageNum, pageSize int) ([]dto.PmsProduct, error) {
-	return new(dao.HomeDao).GetNewProductList(ctx, mysql.DB().GetDbR().WithContext(ctx), pageNum, pageSize)
+func (s *service) NewProductList(ctx context.Context, pageNum, pageSize int, locale string) ([]dto.PmsProduct, error) {
+	return new(dao.HomeDao).GetNewProductList(ctx, mysql.DB().GetDbR().WithContext(ctx), pageNum, pageSize, locale)
 }
 
 func (s *service) GetHomeFlashPromotion(ctx context.Context) (*dto.HomeFlashPromotion, error) {

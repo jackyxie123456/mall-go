@@ -14,3 +14,4 @@ sku的库存
 | 9 | promotion_price | 单品促销价格 | decimal(10,2) |  | YES |  |  |
 | 10 | lock_stock | 锁定库存 | int |  | YES |  | 0 |
 | 11 | sp_data | 商品销售属性，json格式 | varchar(500) |  | YES |  |  |
+| 12 | sp_data_en | 商品销售属性，json格式 | varchar(500) |  | YES |  |  |

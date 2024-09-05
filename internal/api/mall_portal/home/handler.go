@@ -23,7 +23,7 @@ type Handler interface {
 
 	// GetProductCateList 获取首页商品分类
 	// @Tags HomeController
-	// @Router /home/productCateList/{parentId} [get]
+	// @Router /home/productCateList/{parentId}/en [get]
 	GetProductCateList(*gin.Context)
 
 	// GetSubjectList 根据分类获取专题

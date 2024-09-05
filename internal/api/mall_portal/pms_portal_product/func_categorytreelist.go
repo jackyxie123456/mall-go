@@ -4,11 +4,14 @@ import (
 	"github.com/ChangSZ/mall-go/internal/api"
 	"github.com/ChangSZ/mall-go/internal/dto"
 	"github.com/ChangSZ/mall-go/pkg/log"
+	"github.com/ChangSZ/mall-go/pkg/validator"
 
 	"github.com/gin-gonic/gin"
 )
 
-type categoryTreeListRequest struct{}
+type categoryTreeListRequest struct {
+	Locale string `form:"locale,default=zh" binding:"omitempty"` //jacky.xie@2024-08-31
+}
 
 type categoryTreeListResponse struct {
 	List []dto.PmsProductCategoryNode `json:",inline"`
@@ -25,10 +28,16 @@ type categoryTreeListResponse struct {
 // @Failure 400 {object} code.Failure
 // @Router /product/categoryTreeList [get]
 func (h *handler) CategoryTreeList(ctx *gin.Context) {
-	_ = new(categoryTreeListRequest)
+	req := new(categoryTreeListRequest)
 	res := new(categoryTreeListResponse)
 
-	list, err := h.service.CategoryTreeList(ctx)
+	if err := ctx.ShouldBind(req); err != nil {
+		log.WithTrace(ctx).Error(err)
+		api.ValidateFailed(ctx, validator.GetValidationError(err).Error())
+		return
+	}
+
+	list, err := h.service.CategoryTreeList(ctx, req.Locale) //jacky.xie@2024-08-31
 	if err != nil {
 		log.WithTrace(ctx).Error(err)
 		api.Failed(ctx, err.Error())

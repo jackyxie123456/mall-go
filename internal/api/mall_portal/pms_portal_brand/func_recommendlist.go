@@ -10,8 +10,9 @@ import (
 )
 
 type recommendListRequest struct {
-	PageNum  int `form:"pageNum,default=1" binding:"omitempty"`
-	PageSize int `form:"pageSize,default=6" binding:"omitempty"`
+	Locale   string `form:"locale,default=zh" binding:"omitempty"` //jacky.xie@2024-08-31
+	PageNum  int    `form:"pageNum,default=1" binding:"omitempty"`
+	PageSize int    `form:"pageSize,default=6" binding:"omitempty"`
 }
 
 type recommendListResponse struct {
@@ -36,8 +37,8 @@ func (h *handler) RecommendList(ctx *gin.Context) {
 		api.ValidateFailed(ctx, validator.GetValidationError(err).Error())
 		return
 	}
-
-	list, err := h.service.RecommendList(ctx, req.PageNum, req.PageSize)
+	//jacky.xie@2024-08-31
+	list, err := h.service.RecommendList(ctx, req.PageNum, req.PageSize, req.Locale) //jacky.xie@2024-08-31
 	if err != nil {
 		log.WithTrace(ctx).Error(err)
 		api.Failed(ctx, err.Error())

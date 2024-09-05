@@ -8,4 +8,5 @@ type PmsProductAttributeValue struct {
 	ProductId          int64  //
 	ProductAttributeId int64  //
 	Value              string // 手动添加规格或参数的值，参数单值，规格有多个时以逗号隔开
+	ValueEn            string // 手动添加规格或参数的值，参数单值，规格有多个时以逗号隔开
 }

@@ -5,15 +5,18 @@ type PmsProductAttributeValue struct {
 	ProductId          int64  `json:"productId"`          //
 	ProductAttributeId int64  `json:"productAttributeId"` //
 	Value              string `json:"value"`              // 手动添加规格或参数的值，参数单值，规格有多个时以逗号隔开
+	ValueEn            string `json:"valueEn"`            // 手动添加规格或参数的值，参数单值，规格有多个时以逗号隔开 E 文
 }
 
 type PmsProductAttribute struct {
 	Id                         int64  `json:"id"`
 	ProductAttributeCategoryId int64  `json:"productAttributeCategoryId"`
 	Name                       string `json:"name"`
+	NameEn                     string `json:"nameEn"` //jacky.xie @2024.09.04
 	SelectType                 int32  `json:"selectType"`
 	InputType                  int32  `json:"inputType"`
 	InputList                  string `json:"inputList"`
+	InputListEn                string `json:"inputListEn"` //jacky.xie @2024.09.04
 	Sort                       int32  `json:"sort"`
 	FilterType                 int32  `json:"filterType"`
 	SearchType                 int32  `json:"searchType"`
@@ -25,9 +28,11 @@ type PmsProductAttribute struct {
 type PmsProductAttrParam struct {
 	ProductAttributeCategoryId int64  `json:"productAttributeCategoryId" binding:"required"` // 属性分类ID
 	Name                       string `json:"name" binding:"required"`                       // 属性名称
+	NameEn                     string `json:"nameEn" binding:"required"`                     // 属性名称 E 文 //jacky.xie @2024.09.04
 	SelectType                 int32  `json:"selectType" binding:"omitempty,oneof=0 1 2"`    // 属性选择类型：0->唯一；1->单选；2->多选
 	InputType                  int32  `json:"inputType" binding:"omitempty,oneof=0 1"`       // 属性录入方式：0->手工录入；1->从列表中选取
 	InputList                  string `json:"inputList"`                                     // 可选值列表，以逗号隔开
+	InputListEn                string `json:"inputListEn"`                                   // 可选值列表 E ，以逗号隔开 //jacky.xie @2024.09.04
 	Sort                       int32  `json:"sort"`                                          // 排序
 	FilterType                 int32  `json:"filterType" binding:"omitempty,oneof=0 1"`      // 分类筛选样式：0->普通；1->颜色
 	SearchType                 int32  `json:"searchType" binding:"omitempty,oneof=0 1 2"`    // 检索类型；0->不需要进行检索；1->关键字检索；2->范围检索

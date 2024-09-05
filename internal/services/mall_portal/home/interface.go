@@ -15,18 +15,18 @@ type Service interface {
 	/**
 	 * 获取首页内容
 	 */
-	Content(ctx context.Context) (*dto.HomeContentResult, error)
+	Content(ctx context.Context, locale string) (*dto.HomeContentResult, error)
 
 	/**
 	 * 首页商品推荐
 	 */
-	RecommendProductList(ctx context.Context, pageNum, pageSize int) ([]dto.PmsProduct, error)
+	RecommendProductList(ctx context.Context, pageNum, pageSize int, locale string) ([]dto.PmsProduct, error) //jacky.xie@2024-08-31
 
 	/**
 	 * 获取商品分类
 	 * @param parentId 0:获取一级分类；其他：获取指定二级分类
 	 */
-	GetProductCateList(ctx context.Context, parentId int64) ([]dto.PmsProductCategory, error)
+	GetProductCateList(ctx context.Context, parentId int64, locale string) ([]dto.PmsProductCategory, error) //jacky.xie@2024-08-31
 
 	/**
 	 * 根据专题分类分页获取专题
@@ -37,10 +37,10 @@ type Service interface {
 	/**
 	 * 分页获取人气推荐商品
 	 */
-	HotProductList(ctx context.Context, pageNum, pageSize int) ([]dto.PmsProduct, error)
+	HotProductList(ctx context.Context, pageNum, pageSize int, locale string) ([]dto.PmsProduct, error) //jacky.xie@2024-08-31
 
 	/**
 	 * 分页获取新品推荐商品
 	 */
-	NewProductList(ctx context.Context, pageNum, pageSize int) ([]dto.PmsProduct, error)
+	NewProductList(ctx context.Context, pageNum, pageSize int, locale string) ([]dto.PmsProduct, error) //jacky.xie@2024-08-31
 }

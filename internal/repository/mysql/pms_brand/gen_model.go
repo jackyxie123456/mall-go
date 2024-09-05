@@ -6,6 +6,7 @@ package pms_brand
 type PmsBrand struct {
 	Id                  int64  //
 	Name                string //
+	NameEn              string //
 	FirstLetter         string // 首字母
 	Sort                int32  //
 	FactoryStatus       int32  // 是否为品牌制造商：0->不是；1->是
@@ -15,4 +16,5 @@ type PmsBrand struct {
 	Logo                string // 品牌logo
 	BigPic              string // 专区大图
 	BrandStory          string // 品牌故事
+	BrandStoryEn        string // 品牌故事
 }

@@ -11,6 +11,7 @@ import (
 
 type updateAttrRequest struct {
 	dto.OmsCartItem `json:",inline"`
+	Locale          string `json:",inline"`
 }
 
 type updateAttrResponse struct {
@@ -36,7 +37,7 @@ func (h *handler) UpdateAttr(ctx *gin.Context) {
 		return
 	}
 
-	count, err := h.service.UpdateAttr(ctx, req.OmsCartItem)
+	count, err := h.service.UpdateAttr(ctx, req.OmsCartItem, req.Locale) //jacky.xie @2024.09.01 未测试
 	if err != nil {
 		log.WithTrace(ctx).Error(err)
 		api.Failed(ctx, err.Error())

@@ -16,6 +16,7 @@ type searchRequest struct {
 	PageNum           int    `form:"pageNum,default=1" binding:"omitempty"`
 	PageSize          int    `form:"pageSize,default=5" binding:"omitempty"`
 	Sort              int    `form:"sort,default=0" binding:"omitempty"`
+	Locale            string `form:"locale,default=zh" binding:"omitempty"` //jacky.xie@2024-08-31
 }
 
 type searchResponse struct {
@@ -46,7 +47,7 @@ func (h *handler) Search(ctx *gin.Context) {
 	}
 
 	list, total, err := h.service.Search(ctx,
-		req.Keyword, req.BrandId, req.ProductCategoryId, req.PageNum, req.PageSize, req.Sort)
+		req.Keyword, req.BrandId, req.ProductCategoryId, req.PageNum, req.PageSize, req.Sort, req.Locale) //jacky.xie@2024-08-31
 	if err != nil {
 		log.WithTrace(ctx).Error(err)
 		api.Failed(ctx, err.Error())

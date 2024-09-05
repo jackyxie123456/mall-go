@@ -72,3 +72,36 @@ $ go run cmd/mall_portal/main.go -env fat
 
 ### 使用介绍
 参见[go-gin-api语雀](https://www.yuque.com/xinliangnote/go-gin-api), 前端几乎没动, 可以参考使用
+
+
+### docker 编译
+```bash
+  docker build -t  mall-portal:v1.0.10 -f ./deploy/docker/Dockerfile_portal .
+  docker tag  mall-portal:v1.0.10 192.168.2.118/project/mall-portal:v1.0.10 
+  docker build -t  192.168.2.118/project/mall-portal:v1.0.20 -f ./deploy/docker/Dockerfile_portal  .
+  docker push 192.168.2.118/project/mall-portal:v1.0.10 
+```
+
+
+### 
+
+
+### 多语言支持
+
+- locale
+  - zh
+  - en 
+- 使用不同表方式 
+  - pms_product 
+  - pms_brand
+  - pms_category
+- 使用表不同字段的方式
+  - pms_sku 
+
+
+- 客户端修改
+  - 多语言字段 Json 文件
+  - JS 访问 
+  - 代码控制的方式 
+
+

@@ -14,7 +14,9 @@ type OmsCartItem struct {
 	Price             float64   // 添加到购物车的价格
 	ProductPic        string    // 商品主图
 	ProductName       string    // 商品名称
+	ProductNameEn     string    // 商品名称
 	ProductSubTitle   string    // 商品副标题（卖点）
+	ProductSubTitleEn string    // 商品副标题（卖点）
 	ProductSkuCode    string    // 商品sku条码
 	MemberNickname    string    // 会员昵称
 	CreateDate        time.Time `gorm:"type:time;default:'1000-01-01 00:00:00'"` // 创建时间
@@ -22,6 +24,8 @@ type OmsCartItem struct {
 	DeleteStatus      int32     // 是否删除
 	ProductCategoryId int64     // 商品分类
 	ProductBrand      string    //
+	ProductBrandEn    string    //
 	ProductSn         string    //
 	ProductAttr       string    // 商品销售属性:[{"key":"颜色","value":"颜色"},{"key":"容量","value":"4G"}]
+	ProductAttrEn     string    // 商品销售属性:[{"key":"颜色","value":"颜色"},{"key":"容量","value":"4G"}]
 }

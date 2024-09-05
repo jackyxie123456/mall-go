@@ -712,6 +712,214 @@ var doc = `{
                 }
             }
         },
+        "/alipay/notify": {
+            "post": {
+                "description": "支付宝异步回调",
+                "consumes": [
+                    "application/x-www-form-urlencoded"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "AlipayController"
+                ],
+                "summary": "支付宝异步回调",
+                "parameters": [
+                    {
+                        "description": "请求信息",
+                        "name": "Request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/alipay.notifyRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/code.Success"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/alipay.notifyResponse"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/code.Failure"
+                        }
+                    }
+                }
+            }
+        },
+        "/alipay/pay": {
+            "get": {
+                "description": "支付宝电脑网站支付",
+                "consumes": [
+                    "application/x-www-form-urlencoded"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "AlipayController"
+                ],
+                "summary": "支付宝电脑网站支付",
+                "parameters": [
+                    {
+                        "description": "请求信息",
+                        "name": "Request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/alipay.payRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/code.Success"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/alipay.payResponse"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/code.Failure"
+                        }
+                    }
+                }
+            }
+        },
+        "/alipay/query": {
+            "get": {
+                "description": "支付宝统一收单线下交易查询",
+                "consumes": [
+                    "application/x-www-form-urlencoded"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "AlipayController"
+                ],
+                "summary": "支付宝统一收单线下交易查询",
+                "parameters": [
+                    {
+                        "description": "请求信息",
+                        "name": "Request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/alipay.queryRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/code.Success"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/alipay.queryResponse"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/code.Failure"
+                        }
+                    }
+                }
+            }
+        },
+        "/alipay/webPay": {
+            "get": {
+                "description": "支付宝手机网站支付",
+                "consumes": [
+                    "application/x-www-form-urlencoded"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "AlipayController"
+                ],
+                "summary": "支付宝手机网站支付",
+                "parameters": [
+                    {
+                        "description": "请求信息",
+                        "name": "Request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/alipay.webPayRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/code.Success"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/alipay.webPayResponse"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/code.Failure"
+                        }
+                    }
+                }
+            }
+        },
         "/api/admin": {
             "get": {
                 "security": [
@@ -13403,6 +13611,66 @@ var doc = `{
                 }
             }
         },
+        "alipay.notifyRequest": {
+            "type": "object"
+        },
+        "alipay.notifyResponse": {
+            "type": "object"
+        },
+        "alipay.payRequest": {
+            "type": "object",
+            "properties": {
+                "outTradeNo": {
+                    "description": "商户订单号，商家自定义，保持唯一性",
+                    "type": "string"
+                },
+                "subject": {
+                    "description": "商品的标题/交易标题/订单标题/订单关键字等",
+                    "type": "string"
+                },
+                "totalAmount": {
+                    "description": "订单总金额，单位为元，精确到小数点后两位",
+                    "type": "number"
+                }
+            }
+        },
+        "alipay.payResponse": {
+            "type": "object"
+        },
+        "alipay.queryRequest": {
+            "type": "object",
+            "properties": {
+                "outTradeNo": {
+                    "type": "string"
+                },
+                "tradeNo": {
+                    "type": "string"
+                }
+            }
+        },
+        "alipay.queryResponse": {
+            "type": "object"
+        },
+        "alipay.webPayRequest": {
+            "type": "object",
+            "properties": {
+                "outTradeNo": {
+                    "description": "商户订单号，商家自定义，保持唯一性",
+                    "type": "string"
+                },
+                "subject": {
+                    "description": "商品的标题/交易标题/订单标题/订单关键字等",
+                    "type": "string"
+                },
+                "totalAmount": {
+                    "description": "订单总金额，单位为元，精确到小数点后两位",
+                    "type": "number"
+                }
+            }
+        },
+        "alipay.webPayResponse": {
+            "type": "object"
+        },
         "authorized.createAPIResponse": {
             "type": "object",
             "properties": {
@@ -17720,6 +17988,9 @@ var doc = `{
         },
         "oms_portal_order.cancelOrderRequest": {
             "type": "object",
+            "required": [
+                "orderId"
+            ],
             "properties": {
                 "orderId": {
                     "type": "integer"
@@ -17737,6 +18008,9 @@ var doc = `{
         },
         "oms_portal_order.cancelUserOrderRequest": {
             "type": "object",
+            "required": [
+                "orderId"
+            ],
             "properties": {
                 "orderId": {
                     "type": "integer"
@@ -17748,6 +18022,9 @@ var doc = `{
         },
         "oms_portal_order.confirmReceiveOrderRequest": {
             "type": "object",
+            "required": [
+                "orderId"
+            ],
             "properties": {
                 "orderId": {
                     "type": "integer"
@@ -17759,6 +18036,9 @@ var doc = `{
         },
         "oms_portal_order.deleteOrderRequest": {
             "type": "object",
+            "required": [
+                "orderId"
+            ],
             "properties": {
                 "orderId": {
                     "type": "integer"

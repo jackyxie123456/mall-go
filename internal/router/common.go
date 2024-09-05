@@ -30,6 +30,7 @@ func InitEngine(ui string) *gin.Engine {
 	eng.Use(
 		middleware.Rate(),
 		middleware.Metrics(),
+		middleware.CORS(),
 		// middleware.AlertNotify(),
 		kgin.Middlewares(tracing.Server(), middleware.Logging(log.GetLoggerWithTrace()), middleware.AddTraceCtx),
 	)

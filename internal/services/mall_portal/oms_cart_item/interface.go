@@ -15,17 +15,17 @@ type Service interface {
 	/**
 	 * 查询购物车中是否包含该商品，有增加数量，无添加到购物车
 	 */
-	Add(ctx context.Context, param dto.OmsCartItem) (int64, error)
+	Add(ctx context.Context, param dto.OmsCartItem, locale string) (int64, error)
 
 	/**
 	 * 根据会员编号获取购物车列表
 	 */
-	List(ctx context.Context) ([]dto.OmsCartItem, error)
+	List(ctx context.Context, locale string) ([]dto.OmsCartItem, error)
 
 	/**
 	 * 获取包含促销活动信息的购物车列表
 	 */
-	ListPromotion(ctx context.Context, cartIds []int64) ([]dto.CartPromotionItem, error)
+	ListPromotion(ctx context.Context, cartIds []int64, locale string) ([]dto.CartPromotionItem, error)
 
 	/**
 	 * 修改某个购物车商品的数量
@@ -40,12 +40,12 @@ type Service interface {
 	/**
 	 *获取购物车中用于选择商品规格的商品信息
 	 */
-	GetCartProduct(ctx context.Context, productId int64) (*dto.CartProduct, error)
+	GetCartProduct(ctx context.Context, productId int64, locale string) (*dto.CartProduct, error)
 
 	/**
 	 * 修改购物车中商品的规格
 	 */
-	UpdateAttr(ctx context.Context, param dto.OmsCartItem) (int64, error)
+	UpdateAttr(ctx context.Context, param dto.OmsCartItem, locale string) (int64, error)
 
 	/**
 	 * 清空购物车

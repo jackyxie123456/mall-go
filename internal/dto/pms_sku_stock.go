@@ -12,6 +12,7 @@ type PmsSkuStock struct {
 	PromotionPrice float64 `json:"promotionPrice"` // 单品促销价格
 	LockStock      int32   `json:"lockStock"`      // 锁定库存
 	SpData         string  `json:"spData"`         // 商品销售属性，json格式
+	SpDataEn       string  `json:"spDataEn"`       // 商品销售属性，json格式
 }
 
 type PmsPidUri struct {

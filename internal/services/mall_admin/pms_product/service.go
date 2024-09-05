@@ -119,6 +119,7 @@ func (s *service) Update(ctx context.Context, id int64, param dto.PmsProductPara
 		"feight_template_id":            param.FeightTemplateId,
 		"product_attribute_category_id": param.ProductAttributeCategoryId,
 		"name":                          param.Name,
+		"name_en":                       param.NameEn, // add by jacky.xie@2024.09.04
 		"pic":                           param.Pic,
 		"product_sn":                    param.ProductSn,
 		"delete_status":                 param.DeleteStatus,
@@ -134,7 +135,9 @@ func (s *service) Update(ctx context.Context, id int64, param dto.PmsProductPara
 		"gift_point":                    param.GiftPoint,
 		"use_point_limit":               param.UsePointLimit,
 		"sub_title":                     param.SubTitle,
+		"sub_title_en":                  param.SubTitleEn, // add by jacky.xie@2024.09.04
 		"description":                   param.Description,
+		"description_en":                param.DescriptionEn, // add by jacky.xie@2024.09.04
 		"original_price":                param.OriginalPrice,
 		"stock":                         param.Stock,
 		"low_stock":                     param.LowStock,
@@ -154,7 +157,9 @@ func (s *service) Update(ctx context.Context, id int64, param dto.PmsProductPara
 		"promotion_per_limit":           param.PromotionPerLimit,
 		"promotion_type":                param.PromotionType,
 		"brand_name":                    param.BrandName,
-		"product_category_name":         param.ProductCategoryName,
+		"brand_name_en":                 param.BrandNameEn,         // add by jacky.xie@2024.09.04
+		"product_category_name":         param.ProductCategoryName, // add by jacky.xie@2024.09.04
+		"product_category_name_en":      param.ProductCategoryNameEn,
 	}
 
 	if param.PromotionStartTime.IsZero() {
@@ -335,6 +340,7 @@ func (s *service) handleUpdateSkuStockList(ctx context.Context, currSkuList []dt
 				"promotion_price": v.PromotionPrice,
 				"lock_stock":      v.LockStock,
 				"sp_data":         v.SpData,
+				"sp_data_en":      v.SpDataEn, //jacky.xie @2024.09.04
 			}
 			qb := pms_sku_stock.NewQueryBuilder()
 			qb = qb.WhereId(mysql.EqualPredicate, id)

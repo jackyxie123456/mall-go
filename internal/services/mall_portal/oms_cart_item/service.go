@@ -22,7 +22,7 @@ func New() Service {
 
 func (s *service) i() {}
 
-func (s *service) Add(ctx context.Context, param dto.OmsCartItem) (int64, error) {
+func (s *service) Add(ctx context.Context, param dto.OmsCartItem, locale string) (int64, error) {
 	currentMember, err := ums_member.New().GetCurrentMember(ctx)
 	if err != nil {
 		return 0, err
@@ -71,7 +71,7 @@ func (s *service) GetCartItem(ctx context.Context, cartItem *oms_cart_item.OmsCa
 	return nil, nil
 }
 
-func (s *service) List(ctx context.Context) ([]dto.OmsCartItem, error) {
+func (s *service) List(ctx context.Context, locale string) ([]dto.OmsCartItem, error) {
 	currentMember, err := ums_member.New().GetCurrentMember(ctx)
 	if err != nil {
 		return nil, err
@@ -88,13 +88,19 @@ func (s *service) List(ctx context.Context) ([]dto.OmsCartItem, error) {
 	for _, v := range list {
 		tmp := dto.OmsCartItem{}
 		copy.AssignStruct(v, &tmp)
+		if locale == "en" || locale == "EN" {
+			tmp.ProductName = v.ProductNameEn
+			tmp.ProductAttr = v.ProductAttrEn
+			tmp.ProductSubTitle = v.ProductSubTitleEn
+			tmp.ProductBrand = v.ProductBrandEn // jacky.xie support locale == en @2024.09.01
+		}
 		listData = append(listData, tmp)
 	}
 	return listData, nil
 }
 
-func (s *service) ListPromotion(ctx context.Context, cartIds []int64) ([]dto.CartPromotionItem, error) {
-	cartItemList, err := s.List(ctx)
+func (s *service) ListPromotion(ctx context.Context, cartIds []int64, locale string) ([]dto.CartPromotionItem, error) {
+	cartItemList, err := s.List(ctx, locale)
 	if err != nil {
 		return nil, err
 	}
@@ -115,7 +121,7 @@ func (s *service) ListPromotion(ctx context.Context, cartIds []int64) ([]dto.Car
 
 	cartPromotionItemList := make([]dto.CartPromotionItem, 0)
 	if len(cartItemList) != 0 {
-		cartPromotionItemList, err = oms_promotion.New().CalcCartPromotion(ctx, cartItemList)
+		cartPromotionItemList, err = oms_promotion.New().CalcCartPromotion(ctx, cartItemList, locale)
 		if err != nil {
 			return nil, err
 		}
@@ -154,11 +160,11 @@ func (s *service) Delete(ctx context.Context, ids []int64) (int64, error) {
 		Updates(mysql.DB().GetDbW().WithContext(ctx), data)
 }
 
-func (s *service) GetCartProduct(ctx context.Context, productId int64) (*dto.CartProduct, error) {
-	return new(dao.ProductDao).GetCartProduct(ctx, mysql.DB().GetDbR().WithContext(ctx), productId)
+func (s *service) GetCartProduct(ctx context.Context, productId int64, locale string) (*dto.CartProduct, error) {
+	return new(dao.ProductDao).GetCartProduct(ctx, mysql.DB().GetDbR().WithContext(ctx), productId, locale)
 }
 
-func (s *service) UpdateAttr(ctx context.Context, param dto.OmsCartItem) (int64, error) {
+func (s *service) UpdateAttr(ctx context.Context, param dto.OmsCartItem, locale string) (int64, error) {
 	data := map[string]interface{}{
 		"modify_date":   time.Now(),
 		"delete_status": 1,
@@ -173,7 +179,7 @@ func (s *service) UpdateAttr(ctx context.Context, param dto.OmsCartItem) (int64,
 		return 0, fmt.Errorf("更新失败")
 	}
 	param.Id = 0
-	return s.Add(ctx, param)
+	return s.Add(ctx, param, locale)
 }
 
 func (s *service) Clear(ctx context.Context) (int64, error) {
