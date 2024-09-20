@@ -9,7 +9,8 @@ import (
 )
 
 type createRequest struct {
-	Name string `form:"name"`
+	Name   string `form:"name"`
+	NameEn string `form:"nameEn"`
 }
 
 type createResponse struct {
@@ -35,7 +36,7 @@ func (h *handler) Create(ctx *gin.Context) {
 		return
 	}
 
-	cnt, err := h.service.Create(ctx, req.Name)
+	cnt, err := h.service.Create(ctx, req.Name, req.NameEn) // jacky.xie @2024.09.06
 	if err != nil {
 		log.WithTrace(ctx).Error(err)
 		api.Failed(ctx, err.Error())

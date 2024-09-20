@@ -1,6 +1,8 @@
 package main
 
 import (
+	"fmt"
+
 	"github.com/ChangSZ/mall-go/configs"
 	"github.com/ChangSZ/mall-go/internal/repository/mysql"
 	"github.com/ChangSZ/mall-go/internal/repository/redis"
@@ -32,6 +34,7 @@ import (
 
 // @BasePath /
 func main() {
+
 	// 初始化logger
 	log.Init(configs.ProjectLogFile, configs.ProjectLogRotateMaxDays, configs.ProjectLogLevel)
 
@@ -39,7 +42,8 @@ func main() {
 	otel.SetTracerProvider(tp)
 
 	var opts = []http.ServerOption{ // 这里的ServerOption很多只适用于grpc protobuf
-		http.Address(configs.MallAdminPort),
+		//http.Address(configs.MallAdminPort),
+		http.Address(fmt.Sprintf(":%d", configs.Get().Project.AdminPort)),
 		http.Filter(handlers.CORS(
 			handlers.AllowedOrigins([]string{"*"}),
 			handlers.AllowedMethods([]string{"GET", "POST", "OPTIONS", "PUT", "DELETE", "UPDATE"}),

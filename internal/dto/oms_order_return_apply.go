@@ -17,13 +17,18 @@ type OmsOrderReturnApply struct {
 	HandleTime       time.Time `json:"handleTime"`       // 处理时间
 	ProductPic       string    `json:"productPic"`       // 商品图片
 	ProductName      string    `json:"productName"`      // 商品名称
+	ProductNameEn    string    `json:"productNameEn"`    // 商品名称  jacky.xie@2024.09.11
 	ProductBrand     string    `json:"productBrand"`     // 商品品牌
+	ProductBrandEn   string    `json:"productBrandEn"`   // 商品品牌  jacky.xie@2024.09.11
 	ProductAttr      string    `json:"productAttr"`      // 商品销售属性：颜色：红色；尺码：xl;
+	ProductAttrEn    string    `json:"productAttrEn"`    // 商品销售属性：颜色：红色；尺码：xl; jacky.xie@2024.09.11
 	ProductCount     int32     `json:"productCount"`     // 退货数量
 	ProductPrice     float64   `json:"productPrice"`     // 商品单价
 	ProductRealPrice float64   `json:"productRealPrice"` // 商品实际支付单价
 	Reason           string    `json:"reason"`           // 原因
+	ReasonEn         string    `json:"reasonEn"`         // 原因  jacky.xie@2024.09.11
 	Description      string    `json:"description"`      // 描述
+	DescriptionEn    string    `json:"descriptionEn"`    // 描述   jacky.xie@2024.09.11
 	ProofPics        string    `json:"proofPics"`        // 凭证图片，以逗号隔开
 	HandleNote       string    `json:"handleNote"`       // 处理备注
 	HandleMan        string    `json:"handleMan"`        // 处理人员

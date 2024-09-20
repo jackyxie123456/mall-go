@@ -10,7 +10,9 @@ type OmsOrderItem struct {
 	ProductId         int64   //
 	ProductPic        string  //
 	ProductName       string  //
+	ProductNameEn     string  //  Jacky.xie@2024.09.19
 	ProductBrand      string  //
+	ProductBrandEn    string  // Jacky.xie@2024.09.19
 	ProductSn         string  //
 	ProductPrice      float64 // 销售价格
 	ProductQuantity   int32   // 购买数量
@@ -18,6 +20,7 @@ type OmsOrderItem struct {
 	ProductSkuCode    string  // 商品sku条码
 	ProductCategoryId int64   // 商品分类id
 	PromotionName     string  // 商品促销名称
+	PromotionNameEn   string  // 商品促销名称  Jacky.xie@2024.09.19
 	PromotionAmount   float64 // 商品促销分解金额
 	CouponAmount      float64 // 优惠券优惠分解金额
 	IntegrationAmount float64 // 积分优惠分解金额
@@ -25,4 +28,5 @@ type OmsOrderItem struct {
 	GiftIntegration   int32   //
 	GiftGrowth        int32   //
 	ProductAttr       string  // 商品销售属性:[{"key":"颜色","value":"颜色"},{"key":"容量","value":"4G"}]
+	ProductAttrEn     string  // 商品销售属性:[{"key":"颜色","value":"颜色"},{"key":"容量","value":"4G"}] Jacky.xie@2024.09.19
 }

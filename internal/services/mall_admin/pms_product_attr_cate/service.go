@@ -18,15 +18,17 @@ func New() Service {
 
 func (s *service) i() {}
 
-func (s *service) Create(ctx context.Context, name string) (int64, error) {
+func (s *service) Create(ctx context.Context, name string, nameEn string) (int64, error) {
 	data := pms_product_attribute_category.NewModel()
 	data.Name = name
+	data.NameEn = nameEn
 	return data.Create(mysql.DB().GetDbW().WithContext(ctx))
 }
 
-func (s *service) Update(ctx context.Context, id int64, name string) (int64, error) {
+func (s *service) Update(ctx context.Context, id int64, name string, nameEn string) (int64, error) {
 	data := map[string]interface{}{
-		name: name,
+		name:   name,
+		nameEn: nameEn,
 	}
 	qb := pms_product_attribute_category.NewQueryBuilder()
 	qb = qb.WhereId(mysql.EqualPredicate, id)

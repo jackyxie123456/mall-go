@@ -1,6 +1,8 @@
 package dto
 
-import "time"
+import (
+	"time"
+)
 
 type PmsProductResult struct {
 	PmsProductParam `json:",inline"`
@@ -67,7 +69,7 @@ type PmsProduct struct {
 	DetailDesc                 string    `json:"detailDesc"`                 //
 	DetailHtml                 string    `json:"detailHtml"`                 // 产品详情网页内容
 	DetailMobileHtml           string    `json:"detailMobileHtml"`           // 移动端网页详情
-	PromotionStartTime         time.Time `json:"promotionStartTime"`         // 促销开始时间
+	PromotionStartTime         time.Time `json:"promotionStartTime"`         // 促销开始时间   // json decode 难搞  @2024.09.10 jacky.xie
 	PromotionEndTime           time.Time `json:"promotionEndTime"`           // 促销结束时间
 	PromotionPerLimit          int32     `json:"promotionPerLimit"`          // 活动限购数量
 	PromotionType              int32     `json:"promotionType"`              // 促销类型：0->没有促销使用原价;1->使用促销价；2->使用会员价；3->使用阶梯价格；4->使用满减价格；5->限时购
@@ -77,6 +79,7 @@ type PmsProduct struct {
 	ProductCategoryNameEn      string    `json:"productCategoryNameEn"`      // 商品分类名称
 
 }
+
 type PmsProductLadder struct {
 	Id        int64   `json:"id"`        //
 	ProductId int64   `json:"productId"` //
@@ -93,11 +96,13 @@ type PmsProductFullReduction struct {
 }
 
 type PmsMemberPrice struct {
-	Id              int64   `json:"id"`              //
-	ProductId       int64   `json:"productId"`       //
-	MemberLevelId   int64   `json:"memberLevelId"`   //
-	MemberPrice     float64 `json:"memberPrice"`     // 会员价格
-	MemberLevelName string  `json:"memberLevelName"` //  Jacky.xie 是否需要英文
+	Id                int64   `json:"id"`                //
+	ProductId         int64   `json:"productId"`         //
+	MemberLevelId     int64   `json:"memberLevelId"`     //
+	MemberPrice       float64 `json:"memberPrice"`       // 会员价格
+	MemberLevelName   string  `json:"memberLevelName"`   //  Jacky.xie 是否需要英文
+	MemberLevelNameEn string  `json:"memberLevelNameEn"` //  Jacky.xie 是否需要英文   @2024.09.11
+
 }
 
 // PmsPortalProductDetail 前台商品详情

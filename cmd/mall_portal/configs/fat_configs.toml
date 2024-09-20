@@ -1,3 +1,9 @@
+[project]
+domain = '192.168.2.119'
+port = 8085
+adminDomain = '192.168.2.119'
+adminPort = 8086
+
 [alipay]
 alipaypublickey = 'MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAky5YdhQBfqNzxXFjc9OV5znFyK9m3F7J/82lR7Qy9qnBqoDp7vVAdkjhibpwUu1GuawyqJGtmhKGsKySmcfR52X17JfOb+FJvbhQ5izeTPiyE/VXcjjs6JpzLXuZLjSJDyD9eDdfUVOEgMqnxI+r7sGJcc4M44v0zyUmKEXzlkMAwUVZOLuRBv4X9QbU7zHPO/pFOGkNpI043wqApFVM6sGv1H9ii6epXltpW6d3S0Zgj1OnwxPcbiaRBkHITt8InIvbpLK6jSV4rtfWkR77ufzUms2ugN9RXr7nUOfsHk6zH0hUGRxCYoQJ5CHk2m0GEoT59LZJ3rUIqjVjrM2m8QIDAQAB'
 apiaeskey = 'qw9YR4SBMHlDh5Jv0z92hg=='

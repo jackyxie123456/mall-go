@@ -12,7 +12,7 @@ type PmsProduct struct {
 	FeightTemplateId           int64     //
 	ProductAttributeCategoryId int64     //
 	Name                       string    //
-	NameEn                     string    //
+	NameEn                     string    //    jacky.xie@ 2024.09.06
 	Pic                        string    //
 	ProductSn                  string    // 货号
 	DeleteStatus               int32     // 删除状态：0->未删除；1->已删除
@@ -28,9 +28,9 @@ type PmsProduct struct {
 	GiftPoint                  int32     // 赠送的积分
 	UsePointLimit              int32     // 限制使用的积分数
 	SubTitle                   string    // 副标题
-	SubTitleEn                 string    // 副标题 EN
+	SubTitleEn                 string    // 副标题 EN    jacky.xie@ 2024.09.06
 	Description                string    // 商品描述
-	DescriptionEn              string    // 商品描述 EN
+	DescriptionEn              string    // 商品描述 EN    jacky.xie@ 2024.09.06
 	OriginalPrice              float64   // 市场价
 	Stock                      int32     // 库存
 	LowStock                   int32     // 库存预警值
@@ -50,7 +50,7 @@ type PmsProduct struct {
 	PromotionPerLimit          int32     // 活动限购数量
 	PromotionType              int32     // 促销类型：0->没有促销使用原价;1->使用促销价；2->使用会员价；3->使用阶梯价格；4->使用满减价格；5->限时购
 	BrandName                  string    // 品牌名称
-	BrandNameEn                string    // 品牌名称 en
+	BrandNameEn                string    // 品牌名称 en    jacky.xie@ 2024.09.06
 	ProductCategoryName        string    // 商品分类名称
-	ProductCategoryNameEn      string    // 商品分类名称
+	ProductCategoryNameEn      string    // 商品分类名称    jacky.xie@ 2024.09.06
 }

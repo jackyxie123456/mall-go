@@ -38,17 +38,21 @@ func (s *service) Create(ctx context.Context, param dto.PmsProductCategoryParam)
 
 func (s *service) Update(ctx context.Context, id int64, param dto.PmsProductCategoryParam) (int64, error) {
 	data := map[string]interface{}{
-		"id":           id,
-		"parent_id":    param.ParentId,
-		"name":         param.Name,
-		"level":        s.getCategoryLevel(ctx, param.ParentId),
-		"product_unit": param.ProductUnit,
-		"nav_status":   param.NavStatus,
-		"show_status":  param.ShowStatus,
-		"sort":         param.Sort,
-		"icon":         param.Icon,
-		"keywords":     param.Keywords,
-		"description":  param.Description,
+		"id":              id,
+		"parent_id":       param.ParentId,
+		"name":            param.Name,
+		"name_en":         param.NameEn, // jacky.xie @2024.09.11
+		"level":           s.getCategoryLevel(ctx, param.ParentId),
+		"product_unit":    param.ProductUnit,
+		"product_unit_en": param.ProductUnitEn, // jacky.xie@2024.09.11
+		"nav_status":      param.NavStatus,
+		"show_status":     param.ShowStatus,
+		"sort":            param.Sort,
+		"icon":            param.Icon,
+		"keywords":        param.Keywords,
+		"keywords_en":     param.KeywordsEn, // jacky.xie@2024.09.11
+		"description":     param.Description,
+		"description_en":  param.DescriptionEn, // jacky.xie@2024.09.11
 	}
 
 	// 更新商品分类时要更新商品中的名称
@@ -56,7 +60,9 @@ func (s *service) Update(ctx context.Context, id int64, param dto.PmsProductCate
 		qb := pms_product.NewQueryBuilder()
 		qb = qb.WhereProductCategoryId(mysql.EqualPredicate, id)
 		data := map[string]interface{}{
-			"name": param.Name,
+			//"name": param.Name,
+			"product_category_name":    param.Name,
+			"product_category_name_en": param.NameEn,
 		}
 		qb.Updates(mysql.DB().GetDbW().WithContext(ctx), data)
 	}

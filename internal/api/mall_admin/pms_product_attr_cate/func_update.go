@@ -10,7 +10,8 @@ import (
 )
 
 type updateRequest struct {
-	Name string `form:"name"`
+	Name   string `form:"name"`
+	NameEn string `form:"nameEn"` // jacky.xie @2024.09.06
 }
 
 type updateResponse struct {
@@ -43,7 +44,7 @@ func (h *handler) Update(ctx *gin.Context) {
 		return
 	}
 
-	cnt, err := h.service.Update(ctx, uri.Id, req.Name)
+	cnt, err := h.service.Update(ctx, uri.Id, req.Name, req.NameEn) // jacky.xie @2024.09.06
 	if err != nil {
 		log.WithTrace(ctx).Error(err)
 		api.Failed(ctx, err.Error())

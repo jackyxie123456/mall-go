@@ -105,11 +105,13 @@ func (s *service) RecommendProductList(ctx context.Context, pageNum, pageSize in
 		for _, v := range list {
 			tmp := dto.PmsProduct{}
 			copy.AssignStruct(v, &tmp)
-			tmp.BrandName = v.BrandNameEn                     // locale en 情况下使用 EN 属性
-			tmp.Name = v.NameEn                               //
-			tmp.ProductCategoryName = v.ProductCategoryNameEn //
-			tmp.Description = v.DescriptionEn
-			tmp.SubTitle = v.SubTitleEn
+			/*
+				tmp.BrandName = v.BrandNameEn                     // locale en 情况下使用 EN 属性
+				tmp.Name = v.NameEn                               //
+				tmp.ProductCategoryName = v.ProductCategoryNameEn //
+				tmp.Description = v.DescriptionEn
+				tmp.SubTitle = v.SubTitleEn //jacky.xie@2024-09-19
+			*/
 			listData = append(listData, tmp)
 		}
 		return listData, nil
@@ -150,10 +152,12 @@ func (s *service) GetProductCateList(ctx context.Context, parentId int64, locale
 		for _, v := range list {
 			tmp := dto.PmsProductCategory{}
 			copy.AssignStruct(v, &tmp)
-			tmp.Name = v.NameEn
-			tmp.ProductUnit = v.ProductUnitEn
-			tmp.Description = v.DescriptionEn
-			tmp.Keywords = v.KeywordsEn
+			/*
+				tmp.Name = v.NameEn
+				tmp.ProductUnit = v.ProductUnitEn
+				tmp.Description = v.DescriptionEn
+				tmp.Keywords = v.KeywordsEn
+			*/ //jacky.xie@2024.09.19
 			//locale 处理  jacky.xie@2024.09.01
 
 			listData = append(listData, tmp)

@@ -88,12 +88,14 @@ func (s *service) List(ctx context.Context, locale string) ([]dto.OmsCartItem, e
 	for _, v := range list {
 		tmp := dto.OmsCartItem{}
 		copy.AssignStruct(v, &tmp)
-		if locale == "en" || locale == "EN" {
-			tmp.ProductName = v.ProductNameEn
-			tmp.ProductAttr = v.ProductAttrEn
-			tmp.ProductSubTitle = v.ProductSubTitleEn
-			tmp.ProductBrand = v.ProductBrandEn // jacky.xie support locale == en @2024.09.01
-		}
+		// jacky.xie@2024.09.19
+		/*
+			if locale == "en" || locale == "EN" {
+				tmp.ProductName = v.ProductNameEn
+				tmp.ProductAttr = v.ProductAttrEn
+				tmp.ProductSubTitle = v.ProductSubTitleEn
+				tmp.ProductBrand = v.ProductBrandEn // jacky.xie support locale == en @2024.09.01
+			}*/
 		listData = append(listData, tmp)
 	}
 	return listData, nil

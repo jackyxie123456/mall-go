@@ -30,7 +30,55 @@
   - name_en
   - input_list_en
 
-### 修改表 pms_product_attribute
+- pms_product_attribute_category 表
+  新增一个字段
+  - name_en
+
+
+- ums_member_level 表
+  新增一个字段
+  - name_en
+
+
+- ums_member_receive_address
+  新增一个字段
+  - country
+
+- pms_member_price
+  新增一个字段
+  - member_level_name_en
+
+- sms_coupon_product_relation
+  新增一个字段
+  - product_name_en
+
+- sms_coupon_product_category_relation
+  新增两个字段
+  - product_category_name_en
+  - parent_category_name_en 
+
+- oms_order_item
+  新增两个字段
+  - product_name_en
+  - product_brand_en 
+  - promotion_name_en
+  - product_attr_en  
+
+
+- oms_order_return_reason
+  增加一个字段
+  - name_en 
+
+- oms_order_return_apply
+  增加 五 个字段
+  - product_name_en
+  - product_brand_en 
+  - product_attr_en  
+  - reason_en
+  - description_en 
+
+
+### 修改表字段 
 
 ~~~shell
 ALTER TABLE pms_product_attribute
@@ -78,8 +126,40 @@ ADD COLUMN `product_brand_en` VARCHAR(255) DEFAULT '' COMMENT 'en product_brand'
 ADD COLUMN `promotion_name_en` VARCHAR(255) DEFAULT '' COMMENT 'en promotion_name_en',
 ADD COLUMN `product_attr_en` VARCHAR(255) DEFAULT '' COMMENT 'en product_attr';
 
-~~~
 
+ALTER  TABLE pms_product_attribute_category
+ADD COLUMN `name_en` VARCHAR(255) DEFAULT '' COMMENT 'en name';
+
+
+ALTER  TABLE ums_member_level
+ADD COLUMN `name_en` VARCHAR(64) DEFAULT '' COMMENT 'en name';
+
+ALTER  TABLE ums_member_receive_address
+ADD COLUMN `country` VARCHAR(128) DEFAULT '' COMMENT 'country';
+
+ALTER  TABLE pms_member_price
+ADD COLUMN `member_level_name_en` VARCHAR(64) DEFAULT '' COMMENT 'member_level_name en';
+
+ALTER  TABLE sms_coupon_product_relation
+ADD COLUMN `product_name_en` VARCHAR(500) DEFAULT '' COMMENT 'product_name en';
+
+
+ALTER  TABLE sms_coupon_product_category_relation
+ADD COLUMN `product_category_name_en` VARCHAR(200) DEFAULT '' COMMENT 'product_category_name_ en',
+ADD COLUMN `parent_category_name_en` VARCHAR(200) DEFAULT '' COMMENT 'parent_category_name en';
+
+
+
+ALTER  TABLE oms_order_return_reason
+ADD COLUMN `name_en` VARCHAR(200) DEFAULT '' COMMENT 'name_en en';
+
+
+ALTER  TABLE oms_order_return_apply
+ADD COLUMN `product_name_en` VARCHAR(200) DEFAULT '' COMMENT 'product_name_en en',
+ADD COLUMN `product_brand_en` VARCHAR(200) DEFAULT '' COMMENT 'product_brand_en en',
+ADD COLUMN `product_attr_en` VARCHAR(200) DEFAULT '' COMMENT 'product_attr_en en',
+ADD COLUMN `reason_en` VARCHAR(200) DEFAULT '' COMMENT 'reason_en en',
+ADD COLUMN `description_en` VARCHAR(200) DEFAULT '' COMMENT 'description_en en';
 
 ### 修改记录 
 
@@ -123,6 +203,32 @@ SET pms_product.name_en = pms_product_en.name,
     pms_product.description_en = pms_product_en.description,
     pms_product.product_category_name_en = pms_product_en.product_category_name;
 
+
+UPDATE pms_product_attribute_category
+JOIN pms_product_en ON pms_product.id = pms_product_en.id
+SET pms_product.name_en = pms_product_en.name,
+    pms_product.sub_title_en = pms_product_en.sub_title,
+    pms_product.brand_name_en = pms_product_en.brand_name,
+    pms_product.description_en = pms_product_en.description,
+    pms_product.product_category_name_en = pms_product_en.product_category_name;
+
+
+UPDATE pms_member_price
+JOIN ums_member_level ON pms_member_price.member_level_id = ums_member_level.id
+SET pms_member_price.member_level_name_en = ums_member_level.name_en;
+
+
+UPDATE oms_order_item
+JOIN pms_product ON oms_order_item.product_id = pms_product.id
+SET oms_order_item.product_name_en = pms_product.name_en,
+    oms_order_item.product_brand_en = pms_product.brand_name_en;
+
+
+UPDATE oms_cart_item
+JOIN pms_product ON oms_cart_item.product_id = pms_product.id
+SET oms_cart_item.product_name_en = pms_product.name_en,
+    oms_cart_item.product_sub_title_en = pms_product.sub_title_en,
+    oms_cart_item.product_brand_en = pms_product.brand_name_en;
 
 
 

@@ -25,7 +25,8 @@ func (t *HomeDao) getRecommendBrandList_en(ctx context.Context, tx *gorm.DB, pag
 	res := make([]dto.PmsBrand, 0)
 	offset := (pageNum - 1) * pageSize
 	err := tx.Table("pms_brand b").
-		Select("b.*,b.name_en as name,b.brand_story_en as brand_story").
+		Select("b.*").
+		//jacky.xie@2024.09.19
 		//Select("b.id,b.first_letter,b.sort,  b.factory_status,  b.show_status,  b.product_count,  b.product_comment_count,  b.logo, b.big_pic, b.brand_story,  b.name_en as name, b.brand_story_en as brand_story").
 		Joins("LEFT JOIN sms_home_brand_en hb ON hb.brand_id = b.id").
 		Where("hb.recommend_status = 1 AND b.show_status = 1").
@@ -85,8 +86,9 @@ func (t *HomeDao) getHotProductList_en(ctx context.Context, tx *gorm.DB, pageNum
 	res := make([]dto.PmsProduct, 0)
 	offset := (pageNum - 1) * pageSize
 	err := tx.Table("pms_product p").
-		//Select("p.*,p.").
-		Select("p.*, p.name_en as name, p.sub_title_en as sub_title, p.brand_name_en as brand_name,p.description_en as description, p.product_category_name_en as product_category_name").
+		Select("p.*").
+		//jacky.xie@2024.09.19
+		//Select("p.*, p.name_en as name, p.sub_title_en as sub_title, p.brand_name_en as brand_name,p.description_en as description, p.product_category_name_en as product_category_name").
 		Joins("LEFT JOIN sms_home_recommend_product hp ON hp.product_id = p.id").
 		Where("hp.recommend_status = 1 AND p.publish_status = 1").
 		Order("hp.sort DESC").
@@ -112,8 +114,9 @@ func (t *HomeDao) getNewProductList_en(ctx context.Context, tx *gorm.DB, pageNum
 	res := make([]dto.PmsProduct, 0)
 	offset := (pageNum - 1) * pageSize
 	err := tx.Table("pms_product p").
-		//Select("p.*").
-		Select("p.*, p.name_en as name, p.sub_title_en as sub_title, p.brand_name_en as brand_name,p.description_en as description, p.product_category_name_en as product_category_name").
+		Select("p.*").
+		//jacky.xie@2024.09.19
+		//Select("p.*, p.name_en as name, p.sub_title_en as sub_title, p.brand_name_en as brand_name,p.description_en as description, p.product_category_name_en as product_category_name").
 		Joins("LEFT JOIN sms_home_new_product hp ON hp.product_id = p.id").
 		Where("hp.recommend_status = 1 AND p.publish_status = 1").
 		Order("hp.sort DESC").

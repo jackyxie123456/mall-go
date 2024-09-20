@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"fmt"
 
 	"github.com/ChangSZ/mall-go/configs"
 	"github.com/ChangSZ/mall-go/internal/repository/mysql"
@@ -42,7 +43,8 @@ func main() {
 	otel.SetTracerProvider(tp)
 
 	var opts = []http.ServerOption{ // 这里的ServerOption很多只适用于grpc protobuf
-		http.Address(configs.MallPortalPort),
+		//http.Address(configs.MallPortalPort),
+		http.Address(fmt.Sprintf(":%d", configs.Get().Project.Port)),
 		http.Filter(handlers.CORS(
 			handlers.AllowedOrigins([]string{"*"}),
 			handlers.AllowedMethods([]string{"GET", "POST", "OPTIONS", "PUT", "DELETE", "UPDATE"}),

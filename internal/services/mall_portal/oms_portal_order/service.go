@@ -106,9 +106,12 @@ func (s *service) GenerateOrder(ctx context.Context, orderParam dto.OrderParam, 
 		orderItemList = append(orderItemList, dto.OmsOrderItem{
 			ProductId:         cartPromotionItem.ProductId,
 			ProductName:       cartPromotionItem.ProductName,
+			ProductNameEn:     cartPromotionItem.ProductNameEn, // jacky.xie@2024.09.19
 			ProductPic:        cartPromotionItem.ProductPic,
 			ProductAttr:       cartPromotionItem.ProductAttr,
+			ProductAttrEn:     cartPromotionItem.ProductAttrEn, //jacky.xie@2024.09.19
 			ProductBrand:      cartPromotionItem.ProductBrand,
+			ProductBrandEn:    cartPromotionItem.ProductBrandEn, //jacky.xie@2024.09.19
 			ProductSn:         cartPromotionItem.ProductSn,
 			ProductPrice:      cartPromotionItem.Price,
 			ProductQuantity:   cartPromotionItem.Quantity,

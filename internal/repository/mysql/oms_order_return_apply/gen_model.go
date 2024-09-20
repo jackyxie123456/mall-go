@@ -20,13 +20,18 @@ type OmsOrderReturnApply struct {
 	HandleTime       time.Time `gorm:"type:time;default:'1000-01-01 00:00:00'"` // 处理时间
 	ProductPic       string    // 商品图片
 	ProductName      string    // 商品名称
-	ProductBrand     string    // 商品品牌
+	ProductNameEn    string    // 商品名称  jacky.xie@2024.09.11
+	ProductBrand     string    // 商品品牌  jacky.xie@2024.09.11
+	ProductBrandEn   string    // 商品品牌  jacky.xie@2024.09.11
 	ProductAttr      string    // 商品销售属性：颜色：红色；尺码：xl;
+	ProductAttrEn    string    // 商品销售属性：颜色：红色；尺码：xl;
 	ProductCount     int32     // 退货数量
 	ProductPrice     float64   // 商品单价
 	ProductRealPrice float64   // 商品实际支付单价
 	Reason           string    // 原因
+	ReasonEn         string    // 原因  jacky.xie@2024.09.11
 	Description      string    // 描述
+	DescriptionEn    string    // 描述  jacky.xie@2024.09.11
 	ProofPics        string    // 凭证图片，以逗号隔开
 	HandleNote       string    // 处理备注
 	HandleMan        string    // 处理人员

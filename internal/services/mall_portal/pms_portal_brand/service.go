@@ -36,8 +36,9 @@ func (s *service) Detail(ctx context.Context, brandId int64, locale string) (*dt
 		res := &dto.PmsBrand{}
 		copy.AssignStruct(item, res)
 		//locale 处理  jacky.xie@20240901
-		res.Name = item.NameEn
-		res.BrandStory = item.BrandStoryEn
+		// jacky@2024.09.19 取消 brand , 使用 新表
+		//res.Name = item.NameEn
+		//res.BrandStory = item.BrandStoryEn
 		return res, nil
 	} else {
 		qb := pms_brand.NewQueryBuilder().WhereId(mysql.EqualPredicate, brandId)
@@ -109,11 +110,14 @@ func (s *service) productList_en(ctx context.Context,
 		tmp := dto.PmsProduct{}
 		copy.AssignStruct(v, &tmp)
 		//locale 处理  jacky.xie@20240901
-		tmp.BrandName = v.BrandNameEn
-		tmp.Name = v.NameEn
-		tmp.SubTitle = v.SubTitleEn
-		tmp.Description = v.DescriptionEn
-		tmp.ProductCategoryName = v.ProductCategoryNameEn
+		//jacky.xie@2024.09.19 使用 新表
+		/*
+			tmp.BrandName = v.BrandNameEn
+			tmp.Name = v.NameEn
+			tmp.SubTitle = v.SubTitleEn
+			tmp.Description = v.DescriptionEn
+			tmp.ProductCategoryName = v.ProductCategoryNameEn
+		*/
 		listData = append(listData, tmp)
 	}
 	return listData, count, nil

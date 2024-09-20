@@ -1,4 +1,10 @@
 #############【框架】 ############
+[project]
+domain = '192.168.2.119'
+port = 8085
+adminDomain = '192.168.2.119'
+adminPort = 8086
+
 [hashids]
 length = 12
 secret = '6ab6122836cfef95f8db'
@@ -22,10 +28,10 @@ tokenHead = 'Bearer '
 tokenHeader = 'Authorization'
 
 [minio]
-accessKey = 'minioadmin'
+accessKey = 'minio'
 bucketName = 'mall'
-endpoint = 'localhost:9000'
-secretKey = 'minioadmin'
+endpoint = '192.168.2.119:9010'
+secretKey = 'minio123'
 
 [mysql]
 [mysql.base]

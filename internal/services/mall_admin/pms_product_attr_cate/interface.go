@@ -15,12 +15,12 @@ type Service interface {
 	/**
 	 * 创建属性分类
 	 */
-	Create(ctx context.Context, name string) (int64, error)
+	Create(ctx context.Context, name string, nameEn string) (int64, error)
 
 	/**
 	 * 修改属性分类
 	 */
-	Update(ctx context.Context, id int64, name string) (int64, error)
+	Update(ctx context.Context, id int64, name string, nameEn string) (int64, error)
 
 	/**
 	 * 删除属性分类

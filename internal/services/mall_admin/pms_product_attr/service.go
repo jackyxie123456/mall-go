@@ -84,9 +84,11 @@ func (s *service) Update(ctx context.Context, id int64, param dto.PmsProductAttr
 		"id":                            id,
 		"product_attribute_category_id": param.ProductAttributeCategoryId,
 		"name":                          param.Name,
+		"name_en":                       param.NameEn, //jacky.xie @2024.09.10
 		"select_type":                   param.SelectType,
 		"input_type":                    param.InputType,
 		"input_list":                    param.InputList,
+		"input_list_en":                 param.InputListEn,
 		"sort":                          param.Sort,
 		"filter_type":                   param.FilterType,
 		"search_type":                   param.SearchType,

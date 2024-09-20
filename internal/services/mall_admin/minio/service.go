@@ -15,10 +15,12 @@ import (
 )
 
 var (
-	ENDPOINT    = configs.Get().Minio.Endpoint
-	BUCKET_NAME = configs.Get().Minio.BucketName
-	ACCESS_KEY  = configs.Get().Minio.AccessKey
-	SECRET_KEY  = configs.Get().Minio.SecretKey
+	ENDPOINT     = configs.Get().Minio.Endpoint
+	BUCKET_NAME  = configs.Get().Minio.BucketName
+	ACCESS_KEY   = configs.Get().Minio.AccessKey
+	SECRET_KEY   = configs.Get().Minio.SecretKey
+	PROJECT_NAME = configs.Get().Project.Domain
+	PROJECT_PORT = configs.Get().Project.Port
 )
 
 type service struct{}
@@ -71,8 +73,9 @@ func (s *service) Upload(ctx context.Context, file multipart.File, filename stri
 	}
 	log.WithTrace(ctx).Infof("文件上传成功: %v", objectName)
 	// 构建返回结果
-	url := fmt.Sprintf("%s%s/minio/presigned-url?bucket=%s&objectName=%s",
-		configs.ProjectDomain, configs.MallAdminPort, BUCKET_NAME, objectName)
+	url := fmt.Sprintf("%s:%d/minio/presigned-url?bucket=%s&objectName=%s",
+		//configs.ProjectDomain, configs.MallAdminPort, BUCKET_NAME, objectName)
+		PROJECT_NAME, PROJECT_PORT, BUCKET_NAME, objectName)
 	return url, filename, nil
 }
 

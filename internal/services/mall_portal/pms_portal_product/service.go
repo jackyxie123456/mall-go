@@ -129,12 +129,13 @@ func (s *service) search_en(ctx context.Context, keyword string, brandId, produc
 	for _, v := range list {
 		tmp := dto.PmsProduct{}
 		copy.AssignStruct(v, &tmp) // Jacky.xie 2024.09.01
-		// 处理 locale
-		tmp.Name = v.NameEn                               // locale en 情况下使用 EN 属性
-		tmp.SubTitle = v.SubTitleEn                       //
-		tmp.ProductCategoryName = v.ProductCategoryNameEn //
-		tmp.BrandName = v.BrandNameEn
-
+		// 处理 locale  //jacky.xie@2024.09.19 使用新表
+		/*
+			tmp.Name = v.NameEn                               // locale en 情况下使用 EN 属性
+			tmp.SubTitle = v.SubTitleEn                       //
+			tmp.ProductCategoryName = v.ProductCategoryNameEn //
+			tmp.BrandName = v.BrandNameEn
+		*/
 		listData = append(listData, tmp)
 	}
 	return listData, count, nil
@@ -184,11 +185,13 @@ func (s *service) categoryTreeList_en(ctx context.Context) ([]dto.PmsProductCate
 		tmp := dto.PmsProductCategory{}
 		copy.AssignStruct(v, &tmp)
 		//locale process  jacky.xie@2024.09.01
-		tmp.ProductUnit = v.ProductUnitEn
-		tmp.Description = v.DescriptionEn
-		tmp.Keywords = v.KeywordsEn
-		tmp.Name = v.NameEn
-
+		// jacky.xie@2024.09.19  使用新表
+		/*
+			tmp.ProductUnit = v.ProductUnitEn
+			tmp.Description = v.DescriptionEn
+			tmp.Keywords = v.KeywordsEn
+			tmp.Name = v.NameEn
+		*/
 		listData = append(listData, tmp)
 	}
 
@@ -357,9 +360,10 @@ func (s *service) detail_en(ctx context.Context, id int64) (*dto.PmsPortalProduc
 	}
 
 	copy.AssignStruct(product, &result.Product)
-	result.Product.BrandName = product.BrandNameEn //locale jacky.xie@20240901
-	result.Product.Name = product.NameEn           //
-	result.Product.SubTitle = product.SubTitleEn   //
+	//jacky.xie@2024.09.19
+	//result.Product.BrandName = product.BrandNameEn //locale jacky.xie@20240901
+	//result.Product.Name = product.NameEn           //
+	//result.Product.SubTitle = product.SubTitleEn   //
 
 	// 获取品牌信息
 	brand, err := pms_brand.NewQueryBuilder().
@@ -372,8 +376,8 @@ func (s *service) detail_en(ctx context.Context, id int64) (*dto.PmsPortalProduc
 		return nil, fmt.Errorf("未找到商品的品牌信息")
 	}
 	copy.AssignStruct(brand, &result.Brand)
-	result.Brand.BrandStory = brand.BrandStoryEn
-	result.Brand.Name = brand.NameEn // locale jacky.xie@2024.09.01
+	//result.Brand.BrandStory = brand.BrandStoryEn
+	//result.Brand.Name = brand.NameEn // locale jacky.xie@2024.09.01
 
 	// 获取商品属性信息
 	productAttributeList, err := pms_product_attribute.NewQueryBuilder().
@@ -391,8 +395,9 @@ func (s *service) detail_en(ctx context.Context, id int64) (*dto.PmsPortalProduc
 			tmp := dto.PmsProductAttribute{}
 			copy.AssignStruct(v, &tmp)
 
-			tmp.Name = v.NameEn           //jacky.xie @20240901
-			tmp.InputList = v.InputListEn // local == en
+			// jacky.xie@2024.09.19
+			//	tmp.Name = v.NameEn           //jacky.xie @20240901
+			//	tmp.InputList = v.InputListEn // local == en
 			result.ProductAttributeList = append(result.ProductAttributeList, tmp)
 		}
 
@@ -408,7 +413,7 @@ func (s *service) detail_en(ctx context.Context, id int64) (*dto.PmsPortalProduc
 		for _, v := range productAttributeValueList {
 			tmp := dto.PmsProductAttributeValue{} //jacky.xie to do
 			copy.AssignStruct(v, &tmp)
-			tmp.Value = v.ValueEn // locale 处理
+			//tmp.Value = v.ValueEn // locale 处理  //jacky.xie@2024.09.19
 			result.ProductAttributeValueList = append(result.ProductAttributeValueList, tmp)
 		}
 	}

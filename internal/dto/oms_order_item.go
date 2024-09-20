@@ -7,7 +7,9 @@ type OmsOrderItem struct {
 	ProductId         int64   `json:"productId"`         //
 	ProductPic        string  `json:"productPic"`        //
 	ProductName       string  `json:"productName"`       //
+	ProductNameEn     string  `json:"productNameEn"`     // jacky.xie@2024.09.11
 	ProductBrand      string  `json:"productBrand"`      //
+	ProductBrandEn    string  `json:"productBrandEn"`    // jacky.xie@2024.09.11
 	ProductSn         string  `json:"productSn"`         //
 	ProductPrice      float64 `json:"productPrice"`      // 销售价格
 	ProductQuantity   int32   `json:"productQuantity"`   // 购买数量
@@ -15,6 +17,7 @@ type OmsOrderItem struct {
 	ProductSkuCode    string  `json:"productSkuCode"`    // 商品sku条码
 	ProductCategoryId int64   `json:"productCategoryId"` // 商品分类id
 	PromotionName     string  `json:"promotionName"`     // 商品促销名称
+	PromotionNameEn   string  `json:"promotionNameEn"`   // 商品促销名称En  jacky.xie@2024.09.11
 	PromotionAmount   float64 `json:"promotionAmount"`   // 商品促销分解金额
 	CouponAmount      float64 `json:"couponAmount"`      // 优惠券优惠分解金额
 	IntegrationAmount float64 `json:"integrationAmount"` // 积分优惠分解金额
@@ -22,4 +25,5 @@ type OmsOrderItem struct {
 	GiftIntegration   int32   `json:"giftIntegration"`   //
 	GiftGrowth        int32   `json:"giftGrowth"`        //
 	ProductAttr       string  `json:"productAttr"`       // 商品销售属性:[{"key":"颜色","value":"颜色"},{"key":"容量","value":"4G"}]
+	ProductAttrEn     string  `json:"productAttrEn"`     // 商品销售属性:[{"key":"颜色","value":"颜色"},{"key":"容量","value":"4G"}]  jacky.xie@2024.09.11
 }

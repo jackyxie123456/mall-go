@@ -19,7 +19,7 @@ type PmsProductAttrCateDao struct{}
 func (t *PmsProductAttrCateDao) ListWithAttr(ctx context.Context, tx *gorm.DB) ([]PmsProductAttrCateItem, error) {
 	res := make([]PmsProductAttrCateItem, 0)
 	err := tx.Preload("ProductAttributeList", "type=?", 1, func(db *gorm.DB) *gorm.DB {
-		return db.Select("id, name, product_attribute_category_id").Order("id DESC")
-	}).Table("pms_product_attribute_category").Select("id, name").Find(&res).Error
+		return db.Select("id, name,name_en, product_attribute_category_id").Order("id DESC")
+	}).Table("pms_product_attribute_category").Select("id, name,name_en").Find(&res).Error //jacky.xie@2024.09.19
 	return res, err
 }

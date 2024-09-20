@@ -1,7 +1,7 @@
 package dto
 
 type PmsProductCategoryParam struct {
-	ParentId               int64   `json:"parentId" binding:"required"`              // 父分类的编号
+	ParentId               int64   `json:"parentId" binding:"omitempty"`             // 父分类的编号
 	Name                   string  `json:"name" binding:"required"`                  // 商品分类名称
 	NameEn                 string  `json:"nameEn" binding:"required"`                // 商品分类名称 E  //jacky.xie @2024.09.04
 	ProductUnit            string  `json:"productUnit"`                              // 分类单位

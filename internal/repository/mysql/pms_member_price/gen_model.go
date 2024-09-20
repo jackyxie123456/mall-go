@@ -4,9 +4,10 @@ package pms_member_price
 //
 //go:generate gormgen -structs PmsMemberPrice -input .
 type PmsMemberPrice struct {
-	Id              int64   //
-	ProductId       int64   //
-	MemberLevelId   int64   //
-	MemberPrice     float64 // 会员价格
-	MemberLevelName string  //
+	Id                int64   //
+	ProductId         int64   //
+	MemberLevelId     int64   //
+	MemberPrice       float64 // 会员价格
+	MemberLevelName   string  //
+	MemberLevelNameEn string  //  jacky.xie@2024.09.11
 }

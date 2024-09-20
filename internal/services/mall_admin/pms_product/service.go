@@ -157,9 +157,9 @@ func (s *service) Update(ctx context.Context, id int64, param dto.PmsProductPara
 		"promotion_per_limit":           param.PromotionPerLimit,
 		"promotion_type":                param.PromotionType,
 		"brand_name":                    param.BrandName,
-		"brand_name_en":                 param.BrandNameEn,         // add by jacky.xie@2024.09.04
-		"product_category_name":         param.ProductCategoryName, // add by jacky.xie@2024.09.04
-		"product_category_name_en":      param.ProductCategoryNameEn,
+		"brand_name_en":                 param.BrandNameEn, // add by jacky.xie@2024.09.04
+		"product_category_name":         param.ProductCategoryName,
+		"product_category_name_en":      param.ProductCategoryNameEn, // add by jacky.xie@2024.09.04
 	}
 
 	if param.PromotionStartTime.IsZero() {

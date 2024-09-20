@@ -26,6 +26,7 @@ func (s *service) Create(ctx context.Context, param dto.OmsOrderReturnReason) (i
 func (s *service) Update(ctx context.Context, id int64, param dto.OmsOrderReturnReason) (int64, error) {
 	data := map[string]interface{}{
 		"name":        param.Name,
+		"name_en":     param.NameEn,
 		"sort":        param.Sort,
 		"status":      param.Status,
 		"create_time": param.CreateTime,

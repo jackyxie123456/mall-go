@@ -46,6 +46,7 @@ func (t *PmsSkuStockDao) ReplaceList(ctx context.Context,
 			"promotion_price": v.PromotionPrice,
 			"lock_stock":      v.LockStock,
 			"sp_data":         v.SpData,
+			"sp_data_en":      v.SpDataEn, //jacky.xie@2024.09.19
 		}
 		ret := db.Model(pms_sku_stock.NewModel()).
 			Table("pms_sku_stock").

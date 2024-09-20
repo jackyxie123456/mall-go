@@ -10,13 +10,17 @@ type OmsOrderReturnApplyParam struct {
 	ReturnPhone      string  `json:"returnPhone"`      // 退货人电话
 	ProductPic       string  `json:"productPic"`       // 商品图片
 	ProductName      string  `json:"productName"`      // 商品名称
+	ProductNameEn    string  `json:"productNameEn"`    // 商品名称 En  // Jacky.xie@2024.09.19
 	ProductBrand     string  `json:"productBrand"`     // 商品品牌
+	ProductBrandEn   string  `json:"productBrandEn"`   // 商品品牌 En // Jacky.xie@2024.09.19
 	ProductAttr      string  `json:"productAttr"`      // 商品销售属性：颜色：红色；尺码：xl
 	ProductCount     int     `json:"productCount"`     // 退货数量
 	ProductPrice     float64 `json:"productPrice"`     // 商品单价
 	ProductRealPrice float64 `json:"productRealPrice"` // 商品实际支付单价
 	Reason           string  `json:"reason"`           // 原因
+	ReasonEn         string  `json:"reasonEn"`         // 原因  En  // Jacky.xie@2024.09.19
 	Description      string  `json:"description"`      // 描述
+	DescriptionEn    string  `json:"descriptionEn"`    // 描述 En  // Jacky.xie@2024.09.19
 	ProofPics        string  `json:"proofPics"`        // 凭证图片，以逗号隔开
 }
 

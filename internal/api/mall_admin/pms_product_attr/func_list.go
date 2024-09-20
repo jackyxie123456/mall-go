@@ -10,7 +10,7 @@ import (
 )
 
 type listRequest struct {
-	AttrType int32 `json:"type" binding:"omitempty"`
+	AttrType int32 `form:"type" binding:"omitempty"`
 	PageSize int   `form:"pageSize,default=5" binding:"omitempty"`
 	PageNum  int   `form:"pageNum,default=1" binding:"omitempty"`
 }

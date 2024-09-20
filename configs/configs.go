@@ -108,6 +108,13 @@ type Config struct {
 		ReturnUrl       string `toml:"returnUrl"`
 		NotifyUrl       string `toml:"notifyUrl"`
 	}
+
+	Project struct {
+		Domain      string `toml:"domain"`
+		Port        int64  `toml:"port"`
+		AdminDomain string `toml:"adminDomain"`
+		AdminPort   int64  `toml:"adminPort"`
+	} `toml:"project"`
 }
 
 var (

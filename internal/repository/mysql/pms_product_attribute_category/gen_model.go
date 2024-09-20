@@ -6,6 +6,7 @@ package pms_product_attribute_category
 type PmsProductAttributeCategory struct {
 	Id             int64  //
 	Name           string //
+	NameEn         string //  jacky.xie@ 2024.09.06
 	AttributeCount int32  // 属性数量
 	ParamCount     int32  // 参数数量
 }

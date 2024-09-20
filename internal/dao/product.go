@@ -21,7 +21,7 @@ func (t *ProductDao) getCartProduct_en(ctx context.Context, tx *gorm.DB, id int6
 		}).
 		Table("pms_product p").
 		//Select(`p.id, p.name, p.sub_title, p.price, p.pic, p.product_attribute_category_id, p.stock`).
-		Select(`p.id, p.name_en as name, p.sub_title_en as sub_title, p.price, p.pic, p.product_attribute_category_id, p.stock`).
+		Select(`p.id, p.name_en ,p.name_en, p.sub_title_en, p.sub_title, p.price, p.pic, p.product_attribute_category_id, p.stock`). //jacky.xie@2024.09.19
 		Joins("LEFT JOIN pms_product_attribute pa ON p.product_attribute_category_id = pa.product_attribute_category_id").
 		Order("pa.sort DESC").
 		Where("p.id = ? AND pa.type = 0", id).Find(res).Error
@@ -38,7 +38,7 @@ func (t *ProductDao) getCartProduct_zh(ctx context.Context, tx *gorm.DB, id int6
 			return db.Select("id, sku_code, price, stock, pic")
 		}).
 		Table("pms_product p").
-		Select(`p.id, p.name, p.sub_title, p.price, p.pic, p.product_attribute_category_id, p.stock`).
+		Select(`p.id, p.name, p.name_en, p.sub_title_en, p.sub_title, p.price, p.pic, p.product_attribute_category_id, p.stock`). //jacky.xie@2024.09.19
 		Joins("LEFT JOIN pms_product_attribute pa ON p.product_attribute_category_id = pa.product_attribute_category_id").
 		Order("pa.sort DESC").
 		Where("p.id = ? AND pa.type = 0", id).Find(res).Error
@@ -71,7 +71,7 @@ func (t *ProductDao) GetPromotionProductList(ctx context.Context, tx *gorm.DB, i
 			return db.Select("id, product_id, full_price, reduce_price")
 		}).
 		Table("pms_product p").
-		Select(`p.id, p.name, p.promotion_type, p.gift_growth, p.gift_point`).
+		Select(`p.id, p.name ,p.name_en, p.promotion_type, p.gift_growth, p.gift_point`). //jacky.xie@2024.09.19   add name_en
 		Where("p.id IN ?", ids).Find(&res).Error
 	return res, err
 }

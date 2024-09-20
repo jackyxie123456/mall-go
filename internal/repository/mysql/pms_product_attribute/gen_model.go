@@ -7,7 +7,7 @@ type PmsProductAttribute struct {
 	Id                         int64  //
 	ProductAttributeCategoryId int64  //
 	Name                       string //
-	NameEn                     string //
+	NameEn                     string //   jacky.xie@ 2024.09.06
 	SelectType                 int32  // 属性选择类型：0->唯一；1->单选；2->多选
 	InputType                  int32  // 属性录入方式：0->手工录入；1->从列表中选取
 	InputList                  string // 可选值列表，以逗号隔开

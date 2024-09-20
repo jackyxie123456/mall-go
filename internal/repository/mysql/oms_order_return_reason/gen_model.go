@@ -8,6 +8,7 @@ import "time"
 type OmsOrderReturnReason struct {
 	Id         int64     //
 	Name       string    // 退货类型
+	NameEn     string    // 退货类型 jacky.xie@2024.09.11
 	Sort       int32     //
 	Status     int32     // 状态：0->不启用；1->启用
 	CreateTime time.Time `gorm:"autoCreateTime"` // 添加时间
